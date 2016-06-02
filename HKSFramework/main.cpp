@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include "Direct3D.h"
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 bool registerMyClass(HINSTANCE hInstance);
@@ -15,6 +16,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!registerMyClass(hInstance))
 		return 0;
 	if (!createWindow(hInstance, nCmdShow, hWnd, 640, 480, false))
+		return 0;
+
+	Direct3D d3d;
+	if (FAILED(d3d.init(hWnd)))
 		return 0;
 
 	while (msg.message != WM_QUIT) {

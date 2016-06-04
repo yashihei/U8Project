@@ -1,5 +1,4 @@
 #pragma once
-
 #include <d3d9.h>
 #include <d3dx9.h>
 
@@ -7,8 +6,6 @@ class Direct3D {
 public:
 	Direct3D();
 	HRESULT init(HWND hWnd);
-	//HRESULT beginScene();
-	//HRESULT endScene();
 
 	LPDIRECT3DDEVICE9 getDevice() { return m_d3dDevice; }
 private:

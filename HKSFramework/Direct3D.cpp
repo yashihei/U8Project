@@ -1,13 +1,12 @@
 #include "Direct3D.h"
 
-Direct3D::Direct3D() {}
+Direct3D::Direct3D() : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {}
 
 HRESULT Direct3D::init(HWND hWnd) {
 	if ((m_d3d = Direct3DCreate9(D3D_SDK_VERSION)) == NULL) {
 		return E_FAIL;
 	}
 
-	ZeroMemory(&m_d3dpp, sizeof(m_d3dpp));
 	m_d3dpp.Windowed = TRUE;
 	m_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	m_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;

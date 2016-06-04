@@ -1,5 +1,6 @@
 #include <Windows.h>
-#include "Direct3D.h"
+#include <memory>
+#include "Game.h"
 
 LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 bool registerMyClass(HINSTANCE hInstance);
@@ -18,16 +19,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!createWindow(hInstance, nCmdShow, hWnd, 640, 480, false))
 		return 0;
 
-	Direct3D d3d;
-	if (FAILED(d3d.init(hWnd)))
-		return 0;
+	auto game = std::make_unique<Game>();
+	game->init(hWnd);
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		} else {
-			//main loop
+			game->run();
 		}
 	}
 

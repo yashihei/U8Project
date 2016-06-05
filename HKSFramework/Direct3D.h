@@ -5,7 +5,8 @@
 class Direct3D {
 public:
 	Direct3D();
-	HRESULT init(HWND hWnd);
+	~Direct3D();
+	void init(HWND hWnd);
 
 	LPDIRECT3DDEVICE9 getDevice() { return m_d3dDevice; }
 private:

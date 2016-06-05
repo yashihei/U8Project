@@ -1,10 +1,16 @@
 #include "Direct3D.h"
+#include <stdexcept>
 
 Direct3D::Direct3D() : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {}
 
-HRESULT Direct3D::init(HWND hWnd) {
+Direct3D::~Direct3D() {
+	if (m_d3d) m_d3d->Release();
+	if (m_d3dDevice) m_d3dDevice->Release();
+}
+
+void Direct3D::init(HWND hWnd) {
 	if ((m_d3d = Direct3DCreate9(D3D_SDK_VERSION)) == NULL) {
-		return E_FAIL;
+		throw std::runtime_error("Error initialize Direct3D");
 	}
 
 	m_d3dpp.Windowed = TRUE;
@@ -21,8 +27,6 @@ HRESULT Direct3D::init(HWND hWnd) {
 		&m_d3dpp,
 		&m_d3dDevice)))
 	{
-		return E_FAIL;
+		throw std::runtime_error("Error creating Direct3D device");
 	}
-
-	return S_OK;
 }

@@ -1,13 +1,15 @@
 #include <Windows.h>
 #include <memory>
+#include <string>
+#include <stdexcept>
 #include "Game.h"
 
-LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool registerMyClass(HINSTANCE hInstance);
-bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND& hWnd, int width, int height, bool fullScreen);
+bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND* hWnd, int width, int height, bool fullScreen);
 
-TCHAR className[] = TEXT("MyWindow");
-TCHAR titleName[] = TEXT("TitleText");
+const TCHAR className[] = TEXT("MyWindow");
+const TCHAR titleName[] = TEXT("TitleText");
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -16,19 +18,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (!registerMyClass(hInstance))
 		return 0;
-	if (!createWindow(hInstance, nCmdShow, hWnd, 640, 480, false))
+	if (!createWindow(hInstance, nCmdShow, &hWnd, 640, 480, false))
 		return 0;
 
-	auto game = std::make_unique<Game>();
-	game->init(hWnd);
+	try {
+		auto game = std::make_unique<Game>();
+		game->init(hWnd);//throw exception
 
-	while (msg.message != WM_QUIT) {
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		} else {
-			game->run();
+		while (msg.message != WM_QUIT) {
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			} else {
+				game->run();//throw exception
+			}
 		}
+	} catch (const std::runtime_error& error) {
+		MessageBox(hWnd, error.what(), "Runtime error", MB_OK | MB_ICONERROR);
+	} catch (...) {
+		MessageBox(hWnd, TEXT("Unknown error"), "Error", MB_OK | MB_ICONERROR);
 	}
 
 	return msg.wParam;
@@ -56,7 +64,7 @@ bool registerMyClass(HINSTANCE hInstance) {
 	return true;
 }
 
-bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND& hWnd, int width, int height, bool fullScreen) {
+bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND* hWnd, int width, int height, bool fullScreen) {
 	DWORD style;
 
 	if (fullScreen)
@@ -64,16 +72,16 @@ bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND& hWnd, int width, int 
 	else
 		style = WS_OVERLAPPEDWINDOW;
 
-	hWnd = CreateWindow(className, titleName, style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, (HWND)NULL, (HMENU)NULL, hInstance, (LPVOID)NULL);
+	*hWnd = CreateWindow(className, titleName, style, CW_USEDEFAULT, CW_USEDEFAULT, width, height, (HWND)NULL, (HMENU)NULL, hInstance, (LPVOID)NULL);
 
-	if (!hWnd)
+	if (!*hWnd)
 		return false;
 
 	if (!fullScreen)
 	{
 		RECT clientRect;
-		GetClientRect(hWnd, &clientRect);
-		MoveWindow(hWnd,
+		GetClientRect(*hWnd, &clientRect);
+		MoveWindow(*hWnd,
 			GetSystemMetrics(SM_CXSCREEN) / 2 - width / 2,
 			GetSystemMetrics(SM_CYSCREEN) / 2 - height / 2,
 			width + (width - clientRect.right),
@@ -81,8 +89,8 @@ bool createWindow(HINSTANCE hInstance, int nCmdShow, HWND& hWnd, int width, int 
 			TRUE);
 	}
 
-	ShowWindow(hWnd, nCmdShow);
-	UpdateWindow(hWnd);
+	ShowWindow(*hWnd, nCmdShow);
+	UpdateWindow(*hWnd);
 
 	return true;
 }

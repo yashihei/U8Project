@@ -22,11 +22,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 
 	try {
-		auto game = std::make_unique<Game>();
-		game->init(hWnd);//throw exception
+		auto game = std::make_unique<Game>(hWnd);//throw exception
 
-		while (msg.message != WM_QUIT) {
+		while (true) {
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+				if (msg.message == WM_QUIT)
+					break;
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			} else {
@@ -34,9 +35,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 	} catch (const std::runtime_error& error) {
-		MessageBox(hWnd, error.what(), "Runtime error", MB_OK | MB_ICONERROR);
+		MessageBox(NULL, error.what(), "Runtime error", MB_OK | MB_ICONERROR);
 	} catch (...) {
-		MessageBox(hWnd, TEXT("Unknown error"), "Error", MB_OK | MB_ICONERROR);
+		MessageBox(NULL, TEXT("Unknown error"), "Error", MB_OK | MB_ICONERROR);
 	}
 
 	return msg.wParam;
@@ -45,7 +46,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 bool registerMyClass(HINSTANCE hInstance) {
 	WNDCLASSEX wc;
 
-	wc.cbSize = sizeof(wc);
+	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;

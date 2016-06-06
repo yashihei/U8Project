@@ -6,10 +6,9 @@ class Direct3D;
 
 class Game {
 public:
-	Game();
+	explicit Game(HWND hWnd);
 	~Game();
 
-	void init(HWND hWnd);
 	void run() {
 		update();
 		draw();

@@ -4,10 +4,12 @@
 
 class Direct3D {
 public:
-	Direct3D();
+	explicit Direct3D(HWND hWnd);
 	~Direct3D();
-	void init(HWND hWnd);
 
+	HRESULT beginScene();
+	HRESULT endScene();
+	HRESULT present();
 	LPDIRECT3DDEVICE9 getDevice() { return m_d3dDevice; }
 private:
 	LPDIRECT3D9 m_d3d;

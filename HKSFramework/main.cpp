@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 
 	try {
-		auto game = std::make_unique<Game>(hWnd);//throw exception
+		auto game = std::make_unique<Game>(hWnd);
 
 		while (true) {
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			} else {
-				game->run();//throw exception
+				game->run();
 			}
 		}
 	} catch (const std::runtime_error& error) {

@@ -1,8 +1,10 @@
 #pragma once
 #include <Windows.h>
 #include <memory>
+#include <vector>
 
 class Direct3D;
+class Image;
 
 class Game {
 public:
@@ -18,4 +20,5 @@ private:
 	void draw();
 
 	std::shared_ptr<Direct3D> m_direct3d;
+	std::shared_ptr<Image> m_image;
 };

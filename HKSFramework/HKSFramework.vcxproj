@@ -76,12 +76,12 @@
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

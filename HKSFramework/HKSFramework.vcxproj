@@ -82,7 +82,9 @@
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

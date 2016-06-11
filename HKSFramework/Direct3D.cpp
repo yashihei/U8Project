@@ -1,4 +1,5 @@
 #include "Direct3D.h"
+
 #include <stdexcept>
 
 Direct3D::Direct3D(HWND hWnd) : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {

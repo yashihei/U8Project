@@ -1,5 +1,7 @@
 #include "Image.h"
+
 #include <vector>
+#include "Util.h"
 
 Texture::Texture(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice) :
 m_d3dTex(NULL), m_size(0, 0)
@@ -29,15 +31,23 @@ Image::Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice) :
 m_texture(texure), m_d3dDevice(d3dDevice)
 {}
 
-void Image::draw(D3DXVECTOR2 pos, double rad, double scale, bool isFlip) {
+void Image::draw(D3DXVECTOR2 pos, float rad, float scale) {
+	draw({ 0.0f, 0.0f, 1.0f, 1.0f }, pos, rad, scale);
+}
+
+//TODO:îΩì](uvílãtì]Ç≈é¿ëï)
+//TODO:matrixÇ≈é¿ëï
+//TODO:SetStreamÇ≈é¿ëï
+void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale) {
 	auto d3dTex = m_texture->getTexture();
 	auto texSize = m_texture->getSize();
+	texSize.x *= uvRect.w, texSize.y *= uvRect.h;
 	//ÉçÅ[ÉJÉãç¿ïW
 	std::vector<ImageVertex> vx {
-		{ { -texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, { 0.0f, 0.0f } },
-		{ { texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, { 1.0f, 0.0f } },
-		{ { -texSize.x/2, texSize.y/2, 0.0f }, 1.0f, { 0.0f, 1.0f } },
-		{ { texSize.x/2, texSize.y/2, 0.0f }, 1.0f, { 1.0f, 1.0f } },
+		{ { -texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, { uvRect.x, uvRect.y } },
+		{ { texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, { uvRect.x + uvRect.w, uvRect.y } },
+		{ { -texSize.x/2, texSize.y/2, 0.0f }, 1.0f, { uvRect.x, uvRect.y + uvRect.h } },
+		{ { texSize.x/2, texSize.y/2, 0.0f }, 1.0f, { uvRect.x + uvRect.w, uvRect.y + uvRect.h } },
 	};
 	//âÒì]Å®ägëÂÅ®à⁄ìÆ
 	for (int i = 0; i < 4; i++) {
@@ -48,4 +58,28 @@ void Image::draw(D3DXVECTOR2 pos, double rad, double scale, bool isFlip) {
 	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 	m_d3dDevice->SetTexture(0, d3dTex);
 	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vx.data(), sizeof(ImageVertex));
+}
+
+AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int time, bool autoLineBreak) :
+m_image(image),
+m_col(col), m_row(row), m_currentRow(currentRow), m_time(time),
+m_cnt(0),
+m_autoLineBreak(autoLineBreak),
+m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row)
+{}
+
+void AnimationImage::update() {
+	m_cnt++;
+
+	const int startFrame = m_col * m_currentRow;
+	const int nowFrame = Util::wrap(startFrame + m_cnt / m_time, startFrame, startFrame + m_col);
+	const int offsetU = nowFrame % m_col;
+	const int offsetV = nowFrame / m_col;
+
+	m_uvRect.x = offsetU * m_uvRect.w;
+	m_uvRect.y = offsetV * m_uvRect.h;
+}
+
+void AnimationImage::draw(D3DXVECTOR2 pos, float rad, float scale) {
+	m_image->draw(m_uvRect, pos, rad, scale);
 }

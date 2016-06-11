@@ -5,6 +5,7 @@
 
 class Direct3D;
 class Image;
+class AnimationImage;
 
 class Game {
 public:
@@ -21,4 +22,5 @@ private:
 
 	std::shared_ptr<Direct3D> m_direct3d;
 	std::shared_ptr<Image> m_image;
+	std::shared_ptr<AnimationImage> m_anmImage;
 };

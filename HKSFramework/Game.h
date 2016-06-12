@@ -4,12 +4,13 @@
 #include <vector>
 
 class Direct3D;
-class Image;
+class ImageManager;
 class AnimationImage;
+class Keyboard;
 
 class Game {
 public:
-	explicit Game(HWND hWnd);
+	Game(HWND hWnd, HINSTANCE hInstance);
 	~Game();
 
 	void run() {
@@ -21,6 +22,7 @@ private:
 	void draw();
 
 	std::shared_ptr<Direct3D> m_direct3d;
-	std::shared_ptr<Image> m_image;
+	std::shared_ptr<ImageManager> m_imageManager;
 	std::shared_ptr<AnimationImage> m_anmImage;
+	std::shared_ptr<Keyboard> m_keyboard;
 };

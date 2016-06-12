@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 
 	try {
-		auto game = std::make_unique<Game>(hWnd);
+		auto game = std::make_unique<Game>(hWnd, hInstance);
 
 		while (true) {
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

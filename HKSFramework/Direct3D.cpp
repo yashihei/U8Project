@@ -33,8 +33,10 @@ Direct3D::Direct3D(HWND hWnd) : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {
 }
 
 Direct3D::~Direct3D() {
-	if (m_d3dDevice) m_d3dDevice->Release();
-	if (m_d3d) m_d3d->Release();
+	if (m_d3dDevice)
+		m_d3dDevice->Release();
+	if (m_d3d)
+		m_d3d->Release();
 }
 
 HRESULT Direct3D::beginScene() {

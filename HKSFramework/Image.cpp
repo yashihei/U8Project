@@ -18,7 +18,8 @@ m_d3dTex(NULL), m_size(0, 0)
 }
 
 Texture::~Texture() {
-	if (m_d3dTex) m_d3dTex->Release();
+	if (m_d3dTex)
+		m_d3dTex->Release();
 }
 
 Image::Image(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice) :
@@ -58,6 +59,14 @@ void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale) {
 	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
 	m_d3dDevice->SetTexture(0, d3dTex);
 	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vx.data(), sizeof(ImageVertex));
+}
+
+ImageManager::ImageManager(LPDIRECT3DDEVICE9 d3dDevice) :
+m_d3dDevice(d3dDevice)
+{}
+
+void ImageManager::preLoad(std::string fileName, std::string alias) {
+	m_images[alias] = std::make_shared<Image>(fileName, m_d3dDevice);
 }
 
 AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int time, bool autoLineBreak) :

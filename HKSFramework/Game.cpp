@@ -10,6 +10,7 @@ Game::Game(HWND hWnd, HINSTANCE hInstance) {
 	m_imageManager = std::make_shared<ImageManager>(m_direct3d->getDevice());
 	m_imageManager->preLoad("dora01.png", "dragon");
 	m_imageManager->preLoad("car000.png", "car");
+	m_imageManager->preLoad("sysfont.tga", "font");
 	m_anmImage = std::make_shared<AnimationImage>(m_imageManager->getImage("dragon"), 3, 4, 0, 20);
 
 	m_keyboard = std::make_shared<Keyboard>(hWnd, hInstance);

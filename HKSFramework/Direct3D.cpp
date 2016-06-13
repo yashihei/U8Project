@@ -25,10 +25,13 @@ Direct3D::Direct3D(HWND hWnd) : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {
 		throw std::runtime_error("Error creating Direct3D device");
 	}
 
+	//zバッファ有効
 	m_d3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//αブレンドに関する設定
 	m_d3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_d3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	m_d3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//ライト無効
 	m_d3dDevice->LightEnable(0, FALSE);
 }
 
@@ -40,7 +43,7 @@ Direct3D::~Direct3D() {
 }
 
 HRESULT Direct3D::beginScene() {
-	m_d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	m_d3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(10, 20, 30), 1.0f, 0);
 	return m_d3dDevice->BeginScene();
 }
 

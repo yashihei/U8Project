@@ -6,7 +6,7 @@
 #include <memory>
 
 // MEMO
-// DirectInputによるマウスとキーボードの入力は非推奨とされているので、メッセージループを使う予定
+// DirectInputによるマウスとキーボードの入力はMSから非推奨とされているので、メッセージループを使うかも？
 // コントローラはとりあえず、XInputのみで
 
 class Keyboard {
@@ -18,6 +18,7 @@ public:
 	bool isPressed(BYTE code);
 	bool isReleased(BYTE code);
 private:
+	//bitset & enumでキーのフラグ管理
 	enum State {
 		Prev,
 		Press,
@@ -26,8 +27,8 @@ private:
 		StateNum
 	};
 	static const int KeyNum = 256;
-	LPDIRECTINPUT8 m_DirectInput;
-	LPDIRECTINPUTDEVICE8 m_DirectInputDevice;
+	LPDIRECTINPUT8 m_directInput;
+	LPDIRECTINPUTDEVICE8 m_directInputDevice;
 	std::array<std::bitset<StateNum>, KeyNum> m_state;
 };
 
@@ -36,8 +37,8 @@ public:
 	Mouse(HWND hWnd);
 	~Mouse();
 private:
-	LPDIRECTINPUT8 m_DirectInput;
-	LPDIRECTINPUTDEVICE8 m_DirectInputDevice;
+	LPDIRECTINPUT8 m_directInput;
+	LPDIRECTINPUTDEVICE8 m_directInputDevice;
 };
 
 class Input {

@@ -8,7 +8,7 @@ m_d3dTex(NULL), m_size(0, 0)
 {
 	auto hr = D3DXCreateTextureFromFile(d3dDevice, fileName.c_str(), &m_d3dTex);
 	if (FAILED(hr)) {
-		throw std::runtime_error("Error load " + fileName);
+		throw std::runtime_error("Failed load " + fileName);
 	}
 	
 	D3DXIMAGE_INFO info;
@@ -67,6 +67,16 @@ m_d3dDevice(d3dDevice)
 
 void ImageManager::preLoad(std::string fileName, std::string alias) {
 	m_images[alias] = std::make_shared<Image>(fileName, m_d3dDevice);
+}
+
+SplitImage::SplitImage(std::shared_ptr<Image> image, int col, int row) :
+m_image(image), m_col(col), m_row(row)
+{}
+
+void SplitImage::draw(int colNum, int rowNum, D3DXVECTOR2 pos, float rad, float scale) {
+	const float w = 1.0f / m_col;
+	const float h = 1.0f / m_row;
+	m_image->draw({ w * colNum, h * rowNum, w, h }, pos, rad, scale);
 }
 
 AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int time, bool autoLineBreak) :

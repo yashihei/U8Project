@@ -26,15 +26,7 @@ public:
 	Image(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice);
 	Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice);
 
-	/// <param name="pos">中心座標</param>
-	/// <param name="rad">回転角度(ラジアン)</param>
-	/// <param name="scale">拡大比率(1.0が標準)</param>
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
-
-	/// <param name="uvRect">切り取る範囲</param>
-	/// <param name="pos">中心座標</param>
-	/// <param name="rad">回転角度(ラジアン)</param>
-	/// <param name="scale">拡大比率(1.0が標準)</param>
 	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
 private:
 	struct ImageVertex {
@@ -54,6 +46,15 @@ public:
 private:
 	std::unordered_map<std::string, std::shared_ptr<Image>> m_images;
 	LPDIRECT3DDEVICE9 m_d3dDevice;
+};
+
+class SplitImage {
+public:
+	SplitImage(std::shared_ptr<Image> image, int col, int row);
+	void draw(int colNum, int rowNum, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
+private:
+	std::shared_ptr<Image> m_image;
+	int m_col, m_row;
 };
 
 class AnimationImage {

@@ -3,16 +3,16 @@
 #include <vector>
 #include "Util.h"
 
-Texture::Texture(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice) :
+Texture::Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice) :
 m_d3dTex(NULL), m_size(0, 0)
 {
-	auto hr = D3DXCreateTextureFromFile(d3dDevice, fileName.c_str(), &m_d3dTex);
+	auto hr = D3DXCreateTextureFromFile(d3dDevice, filePath.c_str(), &m_d3dTex);
 	if (FAILED(hr)) {
-		throw std::runtime_error("Failed load " + fileName);
+		throw std::runtime_error("Failed load " + filePath);
 	}
 	
 	D3DXIMAGE_INFO info;
-	D3DXGetImageInfoFromFile(fileName.c_str(), &info);
+	D3DXGetImageInfoFromFile(filePath.c_str(), &info);
 	m_size.x = static_cast<float>(info.Width);
 	m_size.y = static_cast<float>(info.Height);
 }
@@ -22,10 +22,10 @@ Texture::~Texture() {
 		m_d3dTex->Release();
 }
 
-Image::Image(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice) :
+Image::Image(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice) :
 m_texture(NULL), m_d3dDevice(d3dDevice)
 {
-	m_texture = std::make_shared<Texture>(fileName, d3dDevice);
+	m_texture = std::make_shared<Texture>(filePath, d3dDevice);
 }
 
 Image::Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice) :
@@ -65,8 +65,8 @@ ImageManager::ImageManager(LPDIRECT3DDEVICE9 d3dDevice) :
 m_d3dDevice(d3dDevice)
 {}
 
-void ImageManager::preLoad(std::string fileName, std::string alias) {
-	m_images[alias] = std::make_shared<Image>(fileName, m_d3dDevice);
+void ImageManager::preLoad(std::string filePath, std::string alias) {
+	m_images[alias] = std::make_shared<Image>(filePath, m_d3dDevice);
 }
 
 SplitImage::SplitImage(std::shared_ptr<Image> image, int col, int row) :

@@ -7,7 +7,7 @@ class Audio {
 public:
 	Audio();
 	~Audio();
-	void loadWave(std::string fileName, std::string alias);
+	void loadWave(std::string filePath, std::string alias);
 	void play(std::string alias);
 	void stop(std::string alias);
 	IXAudio2MasteringVoice* getMasteringVoice() { return m_masteringVoice; }

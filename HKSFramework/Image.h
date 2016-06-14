@@ -7,7 +7,7 @@
 
 class Texture {
 public:
-	Texture(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice);
+	Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
 	~Texture();
 	LPDIRECT3DTEXTURE9 getTexture() const { return m_d3dTex; }
 	D3DXVECTOR2 getSize() const { return m_size; }
@@ -23,7 +23,7 @@ struct RectF {
 
 class Image {
 public:
-	Image(std::string fileName, LPDIRECT3DDEVICE9 d3dDevice);
+	Image(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
 	Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice);
 
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
@@ -41,13 +41,14 @@ private:
 class ImageManager {
 public:
 	ImageManager(LPDIRECT3DDEVICE9 d3dDevice);
-	void preLoad(std::string fileName, std::string alias);
+	void preLoad(std::string filePath, std::string alias);
 	std::shared_ptr<Image> getImage(std::string alias) { return m_images[alias]; }
 private:
 	std::unordered_map<std::string, std::shared_ptr<Image>> m_images;
 	LPDIRECT3DDEVICE9 m_d3dDevice;
 };
 
+//AnimationImageÉNÉâÉXÇ≈ë„ë÷Ç∑ÇÈÇÃÇ≈çÌèúó\íË
 class SplitImage {
 public:
 	SplitImage(std::shared_ptr<Image> image, int col, int row);

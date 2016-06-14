@@ -32,19 +32,19 @@ Audio::~Audio()
 	CoUninitialize();
 }
 
-void Audio::loadWave(std::string fileName, std::string alias) {
+void Audio::loadWave(std::string filePath, std::string alias) {
 	//waveファイルを開く
-	CWaveFile wav;
-	auto hr = wav.Open(const_cast<LPSTR>(fileName.c_str()), NULL, WAVEFILE_READ);
+	CWaveFile wav = {};
+	auto hr = wav.Open(const_cast<LPSTR>(filePath.c_str()), NULL, WAVEFILE_READ);
 	if (FAILED(hr))
-		throw std::runtime_error("Failed load" + fileName);
+		throw std::runtime_error("Failed load" + filePath);
 
 	//バッファにデータを書き込む
 	DWORD waveSize = wav.GetSize();
 	std::vector<BYTE> waveData(waveSize);
 	hr = wav.Read(waveData.data(), waveSize, &waveSize);
 	if (FAILED(hr))
-		throw std::runtime_error("Failed read" + fileName);
+		throw std::runtime_error("Failed read" + filePath);
 
 	IXAudio2SourceVoice* sourceVoice;
 	hr = m_xAudio->CreateSourceVoice(&sourceVoice, wav.GetFormat());

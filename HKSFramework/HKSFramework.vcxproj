@@ -90,7 +90,6 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="SDKwavefile.h" />
     <ClInclude Include="Util.h" />
-    <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

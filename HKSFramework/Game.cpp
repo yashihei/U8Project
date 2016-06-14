@@ -16,9 +16,6 @@ frameCount(0)
 	m_anmImage = std::make_shared<AnimationImage>(m_imageManager->getImage("dragon"), 3, 4, 0, 20);
 
 	m_keyboard = std::make_shared<Keyboard>(hWnd, hInstance);
-	m_audio = std::make_shared<Audio>();
-	m_audio->loadWave("bgm.wav", "bgm");
-	m_audio->play("bgm");
 }
 
 Game::~Game() {}

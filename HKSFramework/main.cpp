@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			} else {
-				game->run();
+				game->run();//mainloop
 			}
 		}
 	} catch (const std::runtime_error& error) {

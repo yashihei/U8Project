@@ -8,9 +8,9 @@
 
 class Keyboard {
 public:
-	Keyboard(HWND hWnd, HINSTANCE hInstance);
+	Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
 	~Keyboard();
-	void update();
+	void updateState();
 	bool isClicked(BYTE code);
 	bool isPressed(BYTE code);
 	bool isReleased(BYTE code);
@@ -24,39 +24,42 @@ private:
 		StateNum
 	};
 	static const int KeyNum = 256;
-	LPDIRECTINPUT8 m_directInput;
 	LPDIRECTINPUTDEVICE8 m_directInputDevice;
 	std::array<std::bitset<StateNum>, KeyNum> m_state;
 };
 
 class Mouse {
 public:
-	Mouse(HWND hWnd, HINSTANCE hInstance);
+	enum class Button {
+		Left,
+		Right,
+		Center,
+	};
+	Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
 	~Mouse();
+	void updateState();
 private:
-	LPDIRECTINPUT8 m_directInput;
 	LPDIRECTINPUTDEVICE8 m_directInputDevice;
 };
 
-enum class Button {
-	Up,
-	Down,
-	Left,
-	Right,
-	Start,
-	Back,
-	LeftThumb,
-	RightThumb,
-	LeftShoulder,
-	RightShoulder,
-	A, B, X, Y
-};
-
 class XInput {
-public:
+	enum class Button {
+		Up,
+		Down,
+		Left,
+		Right,
+		Start,
+		Back,
+		LeftThumb,
+		RightThumb,
+		LeftShoulder,
+		RightShoulder,
+		A, B, X, Y,
+	};
+
 	XInput(int index = 0);
 	~XInput();
-	void update();
+	void updateState();
 	bool isClicked(Button button);
 	bool isPressed(Button button);
 	bool isReleased(Button button);
@@ -64,7 +67,6 @@ public:
 	//Vec2 getRightThumbDir();
 private:
 	int m_index;
-	XINPUT_STATE m_xInputState;
 
 	enum State {
 		Prev,
@@ -75,4 +77,16 @@ private:
 	};
 	static const int buttonNum = 14;
 	std::array<std::bitset<StateNum>, buttonNum> m_state;
+};
+
+class InputManager {
+public:
+	InputManager(HWND hWnd, HINSTANCE hInstance);
+	~InputManager();
+	void update();
+private:
+	LPDIRECTINPUT8 m_directInput;
+	std::shared_ptr<Keyboard> m_keyboard;
+	std::shared_ptr<Mouse> m_mouse;
+	std::shared_ptr<XInput> m_xInput;
 };

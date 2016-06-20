@@ -48,16 +48,6 @@ private:
 	LPDIRECT3DDEVICE9 m_d3dDevice;
 };
 
-//AnimationImageクラスで代替するので削除予定
-class SplitImage {
-public:
-	SplitImage(std::shared_ptr<Image> image, int col, int row);
-	void draw(int colNum, int rowNum, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
-private:
-	std::shared_ptr<Image> m_image;
-	int m_col, m_row;
-};
-
 class AnimationImage {
 public:
 	/// <param name="image">Imageへのスマートポインタ</param>

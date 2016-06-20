@@ -15,18 +15,15 @@ m_frameCount(0)
 	m_imageManager->preLoad("car000.png", "car");
 	m_anmImage = std::make_shared<AnimationImage>(m_imageManager->getImage("dragon"), 3, 4, 0, 20);
 
-	m_audio = std::make_shared<Audio>();
-	m_audio->loadWave("bgm.wav", "bgm");
-	m_audio->play("bgm");
-
-	m_keyboard = std::make_shared<Keyboard>(hWnd, hInstance);
+	m_audioManager = std::make_shared<AudioManager>();
+	m_audioManager->loadWave("bgm.wav", "bgm");
+	m_audioManager->play("bgm");
 }
 
 Game::~Game() {}
 
 void Game::update() {
 	m_frameCount++;
-	m_keyboard->update();
 	m_anmImage->update();
 }
 

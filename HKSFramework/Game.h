@@ -6,8 +6,7 @@
 class Direct3D;
 class ImageManager;
 class AnimationImage;
-class Keyboard;
-class Audio;
+class AudioManager;
 
 class Game {
 public:
@@ -25,7 +24,6 @@ private:
 	std::shared_ptr<Direct3D> m_direct3d;
 	std::shared_ptr<ImageManager> m_imageManager;
 	std::shared_ptr<AnimationImage> m_anmImage;
-	std::shared_ptr<Keyboard> m_keyboard;
-	std::shared_ptr<Audio> m_audio;
+	std::shared_ptr<AudioManager> m_audioManager;
 	int m_frameCount;
 };

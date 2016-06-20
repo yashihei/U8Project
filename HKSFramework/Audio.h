@@ -7,10 +7,10 @@
 
 class WaveFile;
 
-class Audio {
+class AudioManager {
 public:
-	Audio();
-	~Audio();
+	AudioManager();
+	~AudioManager();
 	void loadWave(std::string filePath, std::string alias);
 	void play(std::string alias);
 	void stop(std::string alias);

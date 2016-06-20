@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <vector>
 
-Audio::Audio() :
+AudioManager::AudioManager() :
 m_xAudio(NULL), m_masteringVoice(NULL)
 {
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -22,7 +22,7 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 		throw std::runtime_error("Error creating mastering voice");
 }
 
-Audio::~Audio()
+AudioManager::~AudioManager()
 {
 	m_waveFiles.clear();
 	for (auto& sourceVoice : m_sourceVoices)
@@ -34,7 +34,7 @@ Audio::~Audio()
 	CoUninitialize();
 }
 
-void Audio::loadWave(std::string filePath, std::string alias) {
+void AudioManager::loadWave(std::string filePath, std::string alias) {
 	auto waveFile = std::make_shared<WaveFile>(filePath);
 
 	IXAudio2SourceVoice* sourceVoice;
@@ -52,11 +52,11 @@ void Audio::loadWave(std::string filePath, std::string alias) {
 	m_waveFiles.push_back(waveFile);
 }
 
-void Audio::play(std::string alias) {
+void AudioManager::play(std::string alias) {
 	m_sourceVoices[alias]->Start();
 }
 
-void Audio::stop(std::string alias) {
+void AudioManager::stop(std::string alias) {
 	m_sourceVoices[alias]->Stop();
 }
 

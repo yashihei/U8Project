@@ -2,7 +2,6 @@
 
 #include <stdexcept>
 #include <vector>
-#include "SDKwavefile.h"
 
 Audio::Audio() :
 m_xAudio(NULL), m_masteringVoice(NULL)
@@ -25,6 +24,9 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 
 Audio::~Audio()
 {
+	m_waveFiles.clear();
+	for (auto& sourceVoice : m_sourceVoices)
+		sourceVoice.second->DestroyVoice();
 	if (m_masteringVoice)
 		m_masteringVoice->DestroyVoice();
 	if (m_xAudio)
@@ -33,31 +35,21 @@ Audio::~Audio()
 }
 
 void Audio::loadWave(std::string filePath, std::string alias) {
-	//waveファイルを開く
-	CWaveFile wav = {};
-	auto hr = wav.Open(const_cast<LPSTR>(filePath.c_str()), NULL, WAVEFILE_READ);
-	if (FAILED(hr))
-		throw std::runtime_error("Failed load" + filePath);
-
-	//バッファにデータを書き込む
-	DWORD waveSize = wav.GetSize();
-	std::vector<BYTE> waveData(waveSize);
-	hr = wav.Read(waveData.data(), waveSize, &waveSize);
-	if (FAILED(hr))
-		throw std::runtime_error("Failed read" + filePath);
+	auto waveFile = std::make_shared<WaveFile>(filePath);
 
 	IXAudio2SourceVoice* sourceVoice;
-	hr = m_xAudio->CreateSourceVoice(&sourceVoice, wav.GetFormat());
+	auto hr = m_xAudio->CreateSourceVoice(&sourceVoice, waveFile->getFormat());
 	if (FAILED(hr))
 		throw std::runtime_error("Error creating source voice");
 
 	XAUDIO2_BUFFER buffer = {};
-	buffer.pAudioData = waveData.data();
+	buffer.pAudioData = waveFile->getData();
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
-	buffer.AudioBytes = waveSize;
+	buffer.AudioBytes = waveFile->getSize();
 	sourceVoice->SubmitSourceBuffer(&buffer);
 
 	m_sourceVoices[alias] = sourceVoice;
+	m_waveFiles.push_back(waveFile);
 }
 
 void Audio::play(std::string alias) {
@@ -66,4 +58,41 @@ void Audio::play(std::string alias) {
 
 void Audio::stop(std::string alias) {
 	m_sourceVoices[alias]->Stop();
+}
+
+WaveFile::WaveFile(std::string filePath) {
+	HMMIO hMmio = NULL;
+	MMIOINFO mmioInfo = {};
+
+	hMmio = mmioOpen(const_cast<LPSTR>(filePath.c_str()), &mmioInfo, MMIO_READ);
+	if (!hMmio)
+		throw std::runtime_error("Failed open" + filePath);
+	
+	MMRESULT mmResult;
+
+	MMCKINFO riffChunk;
+	riffChunk.fccType = mmioFOURCC('W', 'A', 'V', 'E');
+	mmResult = mmioDescend(hMmio, &riffChunk, NULL, MMIO_FINDRIFF);
+	//TODO:error check
+
+	MMCKINFO formatChunk;
+	formatChunk.ckid = mmioFOURCC('f', 'm', 't', ' ');
+	mmResult = mmioDescend(hMmio, &formatChunk, &riffChunk, MMIO_FINDCHUNK);
+	//TODO:error check
+
+	mmioRead(hMmio, (HPSTR)&m_waveFormatEx, formatChunk.cksize);
+	//TODO:error check
+
+	mmioAscend(hMmio, &formatChunk, 0);
+
+	MMCKINFO dataChunk;
+	dataChunk.ckid = mmioFOURCC('d', 'a', 't', 'a');
+	mmResult = mmioDescend(hMmio, &dataChunk, &riffChunk, MMIO_FINDCHUNK);
+	//TODO:error check
+
+	m_data.resize(dataChunk.cksize);
+	m_size = mmioRead(hMmio, (HPSTR)m_data.data(), dataChunk.cksize);
+	//TODO:error check
+
+	mmioClose(hMmio, 0);
 }

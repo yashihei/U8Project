@@ -64,16 +64,16 @@ public:
 	/// <param name="col">列の分割数</param>
 	/// <param name="row">行の分割数</param>
 	/// <param name="currentRow">何行目を再生するか</param>
-	/// <param name="time">アニメーションの間隔</param>
+	/// <param name="interval">アニメーションの間隔</param>
 	/// <param name="autoLineBreak">行を自動で送る</param>
-	AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int time, bool autoLineBreak = false);
+	AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int interval, bool autoLineBreak = false);
 
 	void update();
 	void switchRow(int currentRow) { m_currentRow = currentRow; }
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
 private:
 	std::shared_ptr<Image> m_image;
-	int m_col, m_row, m_currentRow, m_time;
+	int m_col, m_row, m_currentRow, m_interval;
 	int m_cnt;
 	bool m_autoLineBreak;
 	RectF m_uvRect;

@@ -79,9 +79,9 @@ void SplitImage::draw(int colNum, int rowNum, D3DXVECTOR2 pos, float rad, float 
 	m_image->draw({ w * colNum, h * rowNum, w, h }, pos, rad, scale);
 }
 
-AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int time, bool autoLineBreak) :
+AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int currentRow, int interval, bool autoLineBreak) :
 m_image(image),
-m_col(col), m_row(row), m_currentRow(currentRow), m_time(time),
+m_col(col), m_row(row), m_currentRow(currentRow), m_interval(interval),
 m_cnt(0),
 m_autoLineBreak(autoLineBreak),
 m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row)
@@ -91,7 +91,7 @@ void AnimationImage::update() {
 	m_cnt++;
 
 	const int startFrame = m_col * m_currentRow;
-	const int nowFrame = Util::wrap(startFrame + m_cnt / m_time, startFrame, startFrame + m_col);
+	const int nowFrame = Util::wrap(startFrame + m_cnt / m_interval, startFrame, startFrame + m_col);
 	const int offsetU = nowFrame % m_col;
 	const int offsetV = nowFrame / m_col;
 

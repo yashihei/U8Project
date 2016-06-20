@@ -6,7 +6,7 @@
 #include "Audio.h"
 
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
-frameCount(0)
+m_frameCount(0)
 {
 	m_direct3d = std::make_shared<Direct3D>(hWnd);
 
@@ -15,16 +15,17 @@ frameCount(0)
 	m_imageManager->preLoad("car000.png", "car");
 	m_anmImage = std::make_shared<AnimationImage>(m_imageManager->getImage("dragon"), 3, 4, 0, 20);
 
-	m_keyboard = std::make_shared<Keyboard>(hWnd, hInstance);
 	m_audio = std::make_shared<Audio>();
 	m_audio->loadWave("bgm.wav", "bgm");
 	m_audio->play("bgm");
+
+	m_keyboard = std::make_shared<Keyboard>(hWnd, hInstance);
 }
 
 Game::~Game() {}
 
 void Game::update() {
-	frameCount++;
+	m_frameCount++;
 	m_keyboard->update();
 	m_anmImage->update();
 }

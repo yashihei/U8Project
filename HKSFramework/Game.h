@@ -27,5 +27,5 @@ private:
 	std::shared_ptr<AnimationImage> m_anmImage;
 	std::shared_ptr<Keyboard> m_keyboard;
 	std::shared_ptr<Audio> m_audio;
-	int frameCount;
+	int m_frameCount;
 };

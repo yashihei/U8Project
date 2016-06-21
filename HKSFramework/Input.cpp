@@ -40,20 +40,8 @@ void Keyboard::updateState() {
 	}
 }
 
-bool Keyboard::isPressed(BYTE code) {
-	return m_state[code][Press];
-}
-
-bool Keyboard::isClicked(BYTE code) {
-	return m_state[code][Click];
-}
-
-bool Keyboard::isReleased(BYTE code) {
-	return m_state[code][Release];
-}
-
 Mouse::Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
-m_directInputDevice(NULL)
+m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 {
 	auto hr = directInput->CreateDevice(GUID_SysMouse, &m_directInputDevice, NULL);
 	if (FAILED(hr))
@@ -80,18 +68,35 @@ void Mouse::updateState() {
 	DIMOUSESTATE mouseState = {};
 	m_directInputDevice->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
 	//TODO:繋がっていなかった場合の処理
+
+	for (int i = 0; i < buttonNum; i++) {
+		m_state[i][Press] = (mouseState.rgbButtons[i] & 0x80) != 0;
+		m_state[i][Click] = (m_state[i][Press] ^ m_state[i][Prev]) & m_state[i][Press];
+		m_state[i][Release] = (m_state[i][Press] ^ m_state[i][Prev]) & !m_state[i][Press];
+		m_state[i][Prev] = m_state[i][Press];
+	}
+
+	//DirectInputでは相対値の座標しかとれないので、win32apiを使う
+	POINT cursorPos;
+	GetCursorPos(&cursorPos);
+	ScreenToClient(m_hWnd, &cursorPos);
+	m_cursorPos.x = cursorPos.x;
+	m_cursorPos.y = cursorPos.y;
 }
 
 //MEMO:XInput、win7ではlibのバージョンで動かないことがあるらしいので注意
 XInput::XInput(int index) :
 m_index(index)
 {
+	m_state.fill(std::bitset<4>());
 }
 
 void XInput::updateState() {
-	//TODO:繋がっていなかった場合の処理
 	XINPUT_STATE xInputState = {};
-	XInputGetState(m_index, &xInputState);
+	auto res = XInputGetState(m_index, &xInputState);
+	if (res == ERROR_DEVICE_NOT_CONNECTED)
+		return;
+	//TODO:繋がっていなかった場合の処理
 
 	int buttonIndex = 1;
 	for (int i = 0; i < buttonNum; i++) {
@@ -101,18 +106,6 @@ void XInput::updateState() {
 		m_state[i][Prev] = m_state[i][Press];
 		buttonIndex *= (buttonIndex != 0x0400) ? 2 : 8;
 	}
-}
-
-bool XInput::isPressed(Button button) {
-	return m_state[static_cast<int>(button)][Press];
-}
-
-bool XInput::isClicked(Button button) {
-	return m_state[static_cast<int>(button)][Press];
-}
-
-bool XInput::isReleased(Button button) {
-	return m_state[static_cast<int>(button)][Press];
 }
 
 InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {
@@ -128,4 +121,10 @@ InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {
 InputManager::~InputManager() {
 	if (m_directInput)
 		m_directInput->Release();
+}
+
+void InputManager::update() {
+	m_keyboard->updateState();
+	m_mouse->updateState();
+	m_xInput->updateState();
 }

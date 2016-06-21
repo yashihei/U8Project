@@ -18,6 +18,8 @@ m_frameCount(0)
 	m_audioManager = std::make_shared<AudioManager>();
 	m_audioManager->loadWave("bgm.wav", "bgm");
 	m_audioManager->play("bgm");
+
+	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 }
 
 Game::~Game() {}

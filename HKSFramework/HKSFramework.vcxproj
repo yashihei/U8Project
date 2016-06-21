@@ -83,6 +83,7 @@
   <ItemGroup>
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Direct3D.h" />
+    <ClInclude Include="FPS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />

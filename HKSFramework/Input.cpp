@@ -104,7 +104,7 @@ void XInput::updateState() {
 		m_state[i][Click] = (m_state[i][Press] ^ m_state[i][Prev]) & m_state[i][Press];
 		m_state[i][Release] = (m_state[i][Press] ^ m_state[i][Prev]) & !m_state[i][Press];
 		m_state[i][Prev] = m_state[i][Press];
-		buttonIndex *= (buttonIndex != 0x0400) ? 2 : 8;
+		buttonIndex *= (buttonIndex != 0x0200) ? 2 : 8;
 	}
 }
 

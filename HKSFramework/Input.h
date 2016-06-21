@@ -59,10 +59,10 @@ public:
 		Right,
 		Start,
 		Back,
-		LeftThumb,
-		RightThumb,
-		LeftShoulder,
-		RightShoulder,
+		LS,
+		RS,
+		LB,
+		RB,
 		A, B, X, Y,
 	};
 
@@ -85,23 +85,23 @@ public:
 	~InputManager();
 	void update();
 
-	bool isPressedButton1() const { return m_keyboard->isPressed(DIK_Z) | m_xInput->isPressed(XInput::A); }
+	bool isPressedButton1() const { return m_keyboard->isPressed(DIK_Z) | m_xInput->isPressed(XInput::Y); }
 	bool isPressedButton2() const { return m_keyboard->isPressed(DIK_X) | m_xInput->isPressed(XInput::B); }
-	bool isPressedButton3() const { return m_keyboard->isPressed(DIK_C) | m_xInput->isPressed(XInput::X); }
-	bool isPressedButton4() const { return m_keyboard->isPressed(DIK_V) | m_xInput->isPressed(XInput::Y); }
+	bool isPressedButton3() const { return m_keyboard->isPressed(DIK_C) | m_xInput->isPressed(XInput::A); }
+	bool isPressedButton4() const { return m_keyboard->isPressed(DIK_V) | m_xInput->isPressed(XInput::X); }
 	bool isPressedUp()      const { return m_keyboard->isPressed(DIK_UP) | m_xInput->isPressed(XInput::Up); }
 	bool isPressedDown()    const { return m_keyboard->isPressed(DIK_DOWN) | m_xInput->isPressed(XInput::Down); }
 	bool isPressedLeft()    const { return m_keyboard->isPressed(DIK_LEFT) | m_xInput->isPressed(XInput::Left); }
 	bool isPressedRight()   const { return m_keyboard->isPressed(DIK_RIGHT) | m_xInput->isPressed(XInput::Right); }
 
-	bool isClickedButton1() const { return m_keyboard->isClicked(DIK_Z) | m_xInput->isClicked(XInput::A); };
+	bool isClickedButton1() const { return m_keyboard->isClicked(DIK_Z) | m_xInput->isClicked(XInput::Y); };
 	bool isClickedButton2() const { return m_keyboard->isClicked(DIK_X) | m_xInput->isClicked(XInput::B); };
-	bool isClickedButton3() const { return m_keyboard->isClicked(DIK_C) | m_xInput->isClicked(XInput::X); };
-	bool isClickedButton4() const { return m_keyboard->isClicked(DIK_V) | m_xInput->isClicked(XInput::Y); };
+	bool isClickedButton3() const { return m_keyboard->isClicked(DIK_C) | m_xInput->isClicked(XInput::A); };
+	bool isClickedButton4() const { return m_keyboard->isClicked(DIK_V) | m_xInput->isClicked(XInput::X); };
 	bool isClickedUp()      const { return m_keyboard->isClicked(DIK_UP) | m_xInput->isClicked(XInput::Up); }
 	bool isClickedDown()    const { return m_keyboard->isClicked(DIK_DOWN) | m_xInput->isClicked(XInput::Down); }
 	bool isClickedLeft()    const { return m_keyboard->isClicked(DIK_LEFT) | m_xInput->isClicked(XInput::Left); }
-	bool isClickedRIght()   const { return m_keyboard->isClicked(DIK_RIGHT) | m_xInput->isClicked(XInput::Right); }
+	bool isClickedRight()   const { return m_keyboard->isClicked(DIK_RIGHT) | m_xInput->isClicked(XInput::Right); }
 private:
 	LPDIRECTINPUT8 m_directInput;
 	std::shared_ptr<Keyboard> m_keyboard;

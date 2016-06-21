@@ -66,7 +66,7 @@ WaveFile::WaveFile(std::string filePath) {
 
 	hMmio = mmioOpen(const_cast<LPSTR>(filePath.c_str()), &mmioInfo, MMIO_READ);
 	if (!hMmio)
-		throw std::runtime_error("Failed open" + filePath);
+		throw std::runtime_error("Failed open " + filePath);
 	
 	MMRESULT mmResult;
 

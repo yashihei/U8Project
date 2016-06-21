@@ -43,6 +43,7 @@ private:
 };
 
 class XInput {
+public:
 	enum class Button {
 		Up,
 		Down,
@@ -58,7 +59,6 @@ class XInput {
 	};
 
 	XInput(int index = 0);
-	~XInput();
 	void updateState();
 	bool isClicked(Button button);
 	bool isPressed(Button button);

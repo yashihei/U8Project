@@ -82,6 +82,7 @@ void Mouse::updateState() {
 	//TODO:繋がっていなかった場合の処理
 }
 
+//MEMO:XInput、win7ではlibのバージョンで動かないことがあるらしいので注意
 XInput::XInput(int index) :
 m_index(index)
 {

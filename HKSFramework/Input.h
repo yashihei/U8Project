@@ -68,9 +68,9 @@ public:
 
 	XInput(int index = 0);
 	void updateState();
-	bool isClicked(Button button) { return m_state[button][Press]; }
+	bool isClicked(Button button) { return m_state[button][Click]; }
 	bool isPressed(Button button) { return m_state[button][Press]; }
-	bool isReleased(Button button) { return m_state[button][Press]; }
+	bool isReleased(Button button) { return m_state[button][Release]; }
 	//Vec2 getLeftThumbDir();
 	//Vec2 getRightThumbDir();
 private:

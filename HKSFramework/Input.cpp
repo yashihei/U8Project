@@ -13,7 +13,7 @@ m_directInputDevice(NULL)
 	hr = m_directInputDevice->SetDataFormat(&c_dfDIKeyboard);
 	if (FAILED(hr))
 		throw std::runtime_error("Error setDataFormat");
-	//強調レベルの設定
+	//協調レベルの設定
 	hr = m_directInputDevice->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (FAILED(hr))
 		throw std::runtime_error("Error setCooperativeLevel");
@@ -59,6 +59,7 @@ m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 	m_directInputDevice->Acquire();
 }
 
+//MEMO:DirectInputだと、タブレットではマウスとして扱ってくれない
 Mouse::~Mouse() {
 	if (m_directInputDevice)
 		m_directInputDevice->Release();

@@ -24,8 +24,9 @@ private:
 
 	std::shared_ptr<Direct3D> m_direct3d;
 	std::shared_ptr<ImageManager> m_imageManager;
-	std::shared_ptr<AnimationImage> m_anmImage;
 	std::shared_ptr<AudioManager> m_audioManager;
 	std::shared_ptr<InputManager> m_inputManager;
+
+	std::shared_ptr<AnimationImage> m_anmImage;
 	int m_frameCount;
 };

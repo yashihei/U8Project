@@ -62,8 +62,6 @@ public:
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
 private:
 	std::shared_ptr<Image> m_image;
-	int m_col, m_row, m_interval, m_currentRow;
-	int m_cnt;
-	bool m_autoLineBreak;
+	int m_col, m_row, m_interval, m_currentRow, m_cnt;
 	RectF m_uvRect;
 };

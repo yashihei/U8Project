@@ -4,6 +4,7 @@
 #include "Image.h"
 #include "Input.h"
 #include "Audio.h"
+#include "FPS.h"
 
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
@@ -20,9 +21,16 @@ m_frameCount(0)
 	//m_audioManager->play("bgm");
 
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
+	m_fpsControler = std::make_shared<FPSControler>(60);
 }
 
 Game::~Game() {}
+
+void Game::run() {
+	update();
+	draw();
+	m_fpsControler->wait();
+}
 
 void Game::update() {
 	m_frameCount++;

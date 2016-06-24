@@ -40,6 +40,7 @@ void Keyboard::updateState() {
 	}
 }
 
+//MEMO:DirectInputだと、タブレットではマウスとして扱ってくれない
 Mouse::Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
 m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 {
@@ -59,7 +60,6 @@ m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 	m_directInputDevice->Acquire();
 }
 
-//MEMO:DirectInputだと、タブレットではマウスとして扱ってくれない
 Mouse::~Mouse() {
 	if (m_directInputDevice)
 		m_directInputDevice->Release();

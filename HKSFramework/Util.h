@@ -12,7 +12,7 @@ namespace Util {
 	template <typename Container, typename Pred> inline void Erase_if(Container& c, Pred pred) {
 		c.erase(std::remove_if(c.begin(), c.end(), pred), c.end());
 	}
-	template <typename Type> inline void OutputDebugValue(Type& value) {
+	template <typename Type> inline void OutputDebugValue(const Type& value) {
 		OutputDebugString(std::to_string(value).c_str());
 		OutputDebugString("\n");
 	}

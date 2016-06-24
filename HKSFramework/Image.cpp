@@ -1,7 +1,6 @@
 #include "Image.h"
 
 #include <vector>
-#include "Util.h"
 
 Texture::Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice) :
 m_d3dTex(NULL), m_size(0, 0)
@@ -38,7 +37,6 @@ void Image::draw(D3DXVECTOR2 pos, float rad, float scale) {
 }
 
 //TODO:”½“](uv’l‹t“]‚ÅŽÀ‘•)
-//TODO:matrix‚ÅŽÀ‘•
 //TODO:SetStream‚ÅŽÀ‘•
 void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale) {
 	auto d3dTex = m_texture->getTexture();
@@ -72,8 +70,7 @@ void ImageManager::preLoad(std::string filePath, std::string alias) {
 
 AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int interval, int startRow) :
 m_image(image),
-m_col(col), m_row(row), m_interval(interval), m_currentRow(startRow),
-m_cnt(0),
+m_col(col), m_row(row), m_interval(interval), m_currentRow(startRow), m_cnt(0),
 m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row)
 {}
 

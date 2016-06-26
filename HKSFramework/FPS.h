@@ -2,8 +2,6 @@
 #pragma comment(lib, "winmm.lib")
 
 #include <Windows.h>
-#include <mmsystem.h>
-#include "Util.h"
 
 class FPSControler {
 public:
@@ -25,6 +23,7 @@ public:
 	void changeFps(int fps) {
 		m_frameInterval = 1000 / fps;
 	}
+	double getFps() const { return m_fps; }
 private:
 	unsigned int m_frameInterval;
 	double m_fps;

@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include <d3dx9.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <bitset>
@@ -41,6 +42,9 @@ public:
 	Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
 	~Mouse();
 	void updateState();
+	bool isClicked(Button button) { return m_state[button][Click]; }
+	bool isPressed(Button button) { return m_state[button][Press]; }
+	bool isReleased(Button button) { return m_state[button][Release]; }
 	Point getCursorPos() { return m_cursorPos; }
 private:
 	static const int buttonNum = 3;
@@ -71,8 +75,8 @@ public:
 	bool isClicked(Button button) { return m_state[button][Click]; }
 	bool isPressed(Button button) { return m_state[button][Press]; }
 	bool isReleased(Button button) { return m_state[button][Release]; }
-	//Vec2 getLeftThumbDir();
-	//Vec2 getRightThumbDir();
+	//D3DXVECTOR2 getLeftThumbDir();
+	//D3DXVECTOR2 getRightThumbDir();
 private:
 	static const int buttonNum = 14;
 	int m_index;

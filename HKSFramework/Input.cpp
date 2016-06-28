@@ -5,7 +5,7 @@
 Keyboard::Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
 m_directInputDevice(NULL)
 {
-	auto hr = directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
+	HRESULT hr = directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
 	if (FAILED(hr))
 		throw std::runtime_error("Error create DirectInput Device");
 
@@ -23,14 +23,20 @@ m_directInputDevice(NULL)
 }
 
 Keyboard::~Keyboard() {
-	if (m_directInputDevice)
+	if (m_directInputDevice) {
+		m_directInputDevice->Unacquire();
 		m_directInputDevice->Release();
+	}
 }
 
 void Keyboard::updateState() {
 	std::array<BYTE, KeyNum> buf;
-	m_directInputDevice->GetDeviceState(buf.size(), buf.data());
-	//TODO:Œq‚ª‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡‚Ìˆ—
+	HRESULT hr = m_directInputDevice->GetDeviceState(buf.size(), buf.data());
+
+	if (FAILED(hr)) {
+		m_directInputDevice->Acquire();
+		return;
+	}
 
 	for (int i = 0; i < KeyNum; i++) {
 		m_state[i][Press] = (buf[i] & 0x80) != 0;
@@ -44,7 +50,7 @@ void Keyboard::updateState() {
 Mouse::Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
 m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 {
-	auto hr = directInput->CreateDevice(GUID_SysMouse, &m_directInputDevice, NULL);
+	HRESULT hr = directInput->CreateDevice(GUID_SysMouse, &m_directInputDevice, NULL);
 	if (FAILED(hr))
 		throw std::runtime_error("Error create DirectInput Device");
 
@@ -61,14 +67,20 @@ m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 }
 
 Mouse::~Mouse() {
-	if (m_directInputDevice)
+	if (m_directInputDevice) {
+		m_directInputDevice->Unacquire();
 		m_directInputDevice->Release();
+	}
 }
 
 void Mouse::updateState() {
 	DIMOUSESTATE mouseState = {};
-	m_directInputDevice->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
-	//TODO:Œq‚ª‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡‚Ìˆ—
+	HRESULT hr = m_directInputDevice->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
+
+	if (FAILED(hr)) {
+		m_directInputDevice->Acquire();
+		return;
+	}
 
 	for (int i = 0; i < buttonNum; i++) {
 		m_state[i][Press] = (mouseState.rgbButtons[i] & 0x80) != 0;
@@ -110,7 +122,7 @@ void XInput::updateState() {
 }
 
 InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {
-	auto hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
+	HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_directInput, NULL);
 	if (FAILED(hr))
 		throw std::runtime_error("Error initialize DirectInput");
 

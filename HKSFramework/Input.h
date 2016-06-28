@@ -23,8 +23,8 @@ public:
 	Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
 	~Keyboard();
 	void updateState();
-	bool isClicked(BYTE code) { return m_state[code][Press]; }
-	bool isPressed(BYTE code) { return m_state[code][Click]; }
+	bool isClicked(BYTE code) { return m_state[code][Click]; }
+	bool isPressed(BYTE code) { return m_state[code][Press]; }
 	bool isReleased(BYTE code) { return m_state[code][Release]; }
 private:
 	static const int KeyNum = 256;
@@ -106,6 +106,15 @@ public:
 	bool isClickedDown()    const { return m_keyboard->isClicked(DIK_DOWN) | m_xInput->isClicked(XInput::Down); }
 	bool isClickedLeft()    const { return m_keyboard->isClicked(DIK_LEFT) | m_xInput->isClicked(XInput::Left); }
 	bool isClickedRight()   const { return m_keyboard->isClicked(DIK_RIGHT) | m_xInput->isClicked(XInput::Right); }
+
+	bool isReleasedButton1() const { return m_keyboard->isReleased(DIK_Z) | m_xInput->isReleased(XInput::Y); };
+	bool isReleasedButton2() const { return m_keyboard->isReleased(DIK_X) | m_xInput->isReleased(XInput::B); };
+	bool isReleasedButton3() const { return m_keyboard->isReleased(DIK_C) | m_xInput->isReleased(XInput::A); };
+	bool isReleasedButton4() const { return m_keyboard->isReleased(DIK_V) | m_xInput->isReleased(XInput::X); };
+	bool isReleasedUp()      const { return m_keyboard->isReleased(DIK_UP) | m_xInput->isReleased(XInput::Up); }
+	bool isReleasedDown()    const { return m_keyboard->isReleased(DIK_DOWN) | m_xInput->isReleased(XInput::Down); }
+	bool isReleasedLeft()    const { return m_keyboard->isReleased(DIK_LEFT) | m_xInput->isReleased(XInput::Left); }
+	bool isReleasedRight()   const { return m_keyboard->isReleased(DIK_RIGHT) | m_xInput->isReleased(XInput::Right); }
 private:
 	LPDIRECTINPUT8 m_directInput;
 	std::shared_ptr<Keyboard> m_keyboard;

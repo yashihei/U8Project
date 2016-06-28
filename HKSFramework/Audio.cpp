@@ -13,7 +13,7 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 	flags |= XAUDIO2_DEBUG_ENGINE;
 #endif
 
-	auto hr = XAudio2Create(&m_xAudio, flags);
+	HRESULT hr = XAudio2Create(&m_xAudio, flags);
 	if (FAILED(hr))
 		throw std::runtime_error("Error initialize XAudio2");
 
@@ -38,7 +38,7 @@ void AudioManager::loadWave(std::string filePath, std::string alias) {
 	auto waveFile = std::make_shared<WaveFile>(filePath);
 
 	IXAudio2SourceVoice* sourceVoice;
-	auto hr = m_xAudio->CreateSourceVoice(&sourceVoice, waveFile->getFormat());
+	HRESULT hr = m_xAudio->CreateSourceVoice(&sourceVoice, waveFile->getFormat());
 	if (FAILED(hr))
 		throw std::runtime_error("Error creating source voice");
 

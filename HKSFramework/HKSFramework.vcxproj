@@ -89,6 +89,8 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Actor.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -26,12 +26,13 @@ public:
 	Image(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
 	Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice);
 
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
-	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
+	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, bool isFlip = false);
+	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, float alpha = 1.0f, bool isFlip = false);
 private:
 	struct ImageVertex {
 		D3DXVECTOR3 p;
 		float rhw;
+		DWORD color;
 		D3DXVECTOR2 t;
 	};
 	std::shared_ptr<Texture> m_texture;
@@ -55,13 +56,16 @@ public:
 	/// <param name="row">行の分割数</param>
 	/// <param name="interval">アニメーションの間隔</param>
 	/// <param name="startRow">何行目から再生するか</param>
-	AnimationImage(std::shared_ptr<Image> image, int col, int row, int interval, int startRow = 0);
-
+	AnimationImage(std::shared_ptr<Image> image, int col, int row, int interval);
 	void update();
-	void switchRow(int row) { m_currentRow = row; m_cnt = 0; }
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f);
+	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, float alpha = 1.0f, bool isFlip = false);
+	void addPattern(std::string alias, std::vector<int> patternList) { m_patterns[alias] = patternList; }
+	void changePattern(std::string alias) { m_currentPattern = alias; m_cnt = 0; }
+	bool isPlaying(std::string alias) { return alias == m_currentPattern; }
 private:
 	std::shared_ptr<Image> m_image;
-	int m_col, m_row, m_interval, m_currentRow, m_cnt;
+	int m_col, m_row, m_interval, m_cnt;
 	RectF m_uvRect;
+	std::string m_currentPattern;
+	std::unordered_map<std::string, std::vector<int>> m_patterns;
 };

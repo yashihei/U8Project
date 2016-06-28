@@ -84,27 +84,3 @@ private:
 	int m_cnt;
 	std::deque<D3DXVECTOR2> m_trail;
 };
-
-class Item {
-public:
-	Item(D3DXVECTOR2 pos, std::shared_ptr<ImageManager> imageManager) :
-		m_pos(pos), m_cnt(0), m_isEnable(true)
-	{
-		m_image = imageManager->getImage("error");
-	}
-	void update() {
-		m_cnt++;
-		m_pos.y += 5.0f;
-	}
-	void draw() {
-		m_image->draw(m_pos, 3.14159f/180*m_cnt*4, 1.5);
-	}
-	void kill() { m_isEnable = false; }
-	D3DXVECTOR2 getPos() { return m_pos; }
-	bool isEnabled() { return m_isEnable; }
-private:
-	std::shared_ptr<Image> m_image;
-	D3DXVECTOR2 m_pos;
-	int m_cnt;
-	bool m_isEnable;
-};

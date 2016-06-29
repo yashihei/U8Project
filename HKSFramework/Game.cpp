@@ -15,8 +15,8 @@ m_frameCount(0)
 	m_direct3d = std::make_shared<Direct3D>(hWnd);
 
 	m_imageManager = std::make_shared<ImageManager>(m_direct3d->getDevice());
-	m_imageManager->preLoad("dat/background.jpg", "background");
-	m_imageManager->preLoad("dat/tewi_material01.png", "tewi01");
+	m_imageManager->load("dat/background.jpg", "background");
+	m_imageManager->load("dat/tewi_material01.png", "tewi01");
 
 	m_audioManager = std::make_shared<AudioManager>();
 	m_audioManager->loadWave("dat/startup.wav", "start");

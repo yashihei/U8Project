@@ -81,22 +81,30 @@ void ImageManager::load(std::string filePath, std::string alias) {
 	m_images[alias] = std::make_shared<Image>(filePath, m_d3dDevice);
 }
 
-AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int interval) :
+AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row) :
 m_image(image),
-m_col(col), m_row(row), m_interval(interval), m_cnt(0),
+m_col(col), m_row(row), m_currentFrame(0),
 m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row)
 {}
 
-void AnimationImage::update() {
-	m_cnt++;
+void AnimationImage::addvanceFrame() {
+	m_currentFrame++;
+	setRect();
+}
 
+void AnimationImage::changeFrame(int value) {
+	m_currentFrame = value;
+	setRect();
+}
+
+void AnimationImage::setRect() {
 	int nowFrame = 0;
 	//指定するパターンが無い場合
 	if (m_currentPattern.empty()) {
-		nowFrame = (m_cnt / m_interval) % (m_col * m_row);
+		nowFrame = m_currentFrame % (m_col * m_row);
 	} else {
 		int patternLen = m_patterns[m_currentPattern].size();
-		nowFrame = m_patterns[m_currentPattern][(m_cnt / m_interval) % patternLen];
+		nowFrame = m_patterns[m_currentPattern][m_currentFrame % patternLen];
 	}
 
 	int offsetU = nowFrame % m_col;

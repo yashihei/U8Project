@@ -12,7 +12,7 @@ public:
 		m_inputManager(inputManager),
 		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(true)
 	{
-		m_tewiAnm = std::make_shared<AnimationImage>(imageManager->getImage("tewi01"), 10, 8, 5);
+		m_tewiAnm = std::make_shared<AnimationImage>(imageManager->getImage("tewi01"), 10, 8);
 		m_tewiAnm->addPattern("wait", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
 		m_tewiAnm->addPattern("jump", { 30, 31, 32, 33, 34, 35, 36, 40, 41, 42 });
 		m_tewiAnm->addPattern("squat", { 20, 21, 22, 23, 24 });
@@ -20,8 +20,9 @@ public:
 		m_tewiAnm->changePattern("wait");
 	}
 	void update() {
-		m_tewiAnm->update();
 		m_cnt++;
+		if (m_cnt % 5 == 0)
+			m_tewiAnm->addvanceFrame();
 
 		if (!m_jump) {
 			if (m_inputManager->isPressedLeft() || m_inputManager->isPressedRight()) {

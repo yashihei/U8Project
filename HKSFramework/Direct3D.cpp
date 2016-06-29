@@ -14,7 +14,7 @@ Direct3D::Direct3D(HWND hWnd) : m_d3d(NULL), m_d3dDevice(NULL), m_d3dpp{} {
 	m_d3dpp.EnableAutoDepthStencil = TRUE;
 	m_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
 	//‚’¼“¯Šú–³Ž‹
-	//m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	m_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	if (FAILED(m_d3d->CreateDevice(
 		D3DADAPTER_DEFAULT,

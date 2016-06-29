@@ -32,31 +32,30 @@ Image::Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice) :
 m_texture(texure), m_d3dDevice(d3dDevice)
 {}
 
-void Image::draw(D3DXVECTOR2 pos, float rad, float scale, bool isFlip) {
-	draw({ 0.0f, 0.0f, 1.0f, 1.0f }, pos, rad, scale);
+void Image::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
+	draw({ 0.0f, 0.0f, 1.0f, 1.0f }, pos, rad, scale, color, flip);
 }
 
-//TODO:反転(uv値逆転で実装)
 //TODO:SetStreamで実装
-void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, float alpha, bool isFlip) {
-	auto texSize = m_texture->getSize();
-	texSize.x *= uvRect.w, texSize.y *= uvRect.h;
-
+void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
 	std::vector<D3DXVECTOR2> uv = {
 		{ uvRect.x, uvRect.y }, { uvRect.x + uvRect.w, uvRect.y }, { uvRect.x, uvRect.y + uvRect.h }, { uvRect.x + uvRect.w, uvRect.y + uvRect.h }
 	};
-	if (isFlip) {
+	if (flip) {
 		std::swap(uv[0], uv[1]);
 		std::swap(uv[2], uv[3]);
 	}
-	//ローカル座標
+
+	auto texSize = m_texture->getSize();
+	texSize.x *= uvRect.w, texSize.y *= uvRect.h;
 	std::vector<ImageVertex> vx {
-		{ { -texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, (DWORD)D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha), { uv[0].x, uv[0].y } },
-		{ { texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, (DWORD)D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha), { uv[1].x, uv[1].y } },
-		{ { -texSize.x/2, texSize.y/2, 0.0f }, 1.0f, (DWORD)D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha), { uv[2].x, uv[2].y } },
-		{ { texSize.x/2, texSize.y/2, 0.0f }, 1.0f, (DWORD)D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha), { uv[3].x, uv[3].y } },
+		{ { -texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, color, { uv[0].x, uv[0].y } },
+		{ { texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, color, { uv[1].x, uv[1].y } },
+		{ { -texSize.x/2, texSize.y/2, 0.0f }, 1.0f, color, { uv[2].x, uv[2].y } },
+		{ { texSize.x/2, texSize.y/2, 0.0f }, 1.0f, color, { uv[3].x, uv[3].y } },
 	};
 
+	//アフィン変換
 	//回転→拡大→移動
 	for (int i = 0; i < 4; i++) {
 		auto tPos = vx[i].p;
@@ -78,22 +77,22 @@ ImageManager::ImageManager(LPDIRECT3DDEVICE9 d3dDevice) :
 m_d3dDevice(d3dDevice)
 {}
 
-void ImageManager::preLoad(std::string filePath, std::string alias) {
+void ImageManager::load(std::string filePath, std::string alias) {
 	m_images[alias] = std::make_shared<Image>(filePath, m_d3dDevice);
 }
 
 AnimationImage::AnimationImage(std::shared_ptr<Image> image, int col, int row, int interval) :
 m_image(image),
 m_col(col), m_row(row), m_interval(interval), m_cnt(0),
-m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row),
-m_currentPattern("default")
+m_uvRect(0.0f, 0.0f, 1.0f / m_col, 1.0f / m_row)
 {}
 
 void AnimationImage::update() {
 	m_cnt++;
 
 	int nowFrame = 0;
-	if (m_currentPattern == "default") {
+	//指定するパターンが無い場合
+	if (m_currentPattern.empty()) {
 		nowFrame = (m_cnt / m_interval) % (m_col * m_row);
 	} else {
 		int patternLen = m_patterns[m_currentPattern].size();
@@ -107,6 +106,6 @@ void AnimationImage::update() {
 	m_uvRect.y = offsetV * m_uvRect.h;
 }
 
-void AnimationImage::draw(D3DXVECTOR2 pos, float rad, float scale, float alpha, bool isFlip) {
-	m_image->draw(m_uvRect, pos, rad, scale, alpha, isFlip);
+void AnimationImage::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
+	m_image->draw(m_uvRect, pos, rad, scale, color, flip);
 }

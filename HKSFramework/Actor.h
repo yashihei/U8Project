@@ -13,10 +13,10 @@ public:
 		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(true)
 	{
 		m_tewiAnm = std::make_shared<AnimationImage>(imageManager->getImage("tewi01"), 10, 8);
-		m_tewiAnm->addPattern("wait", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
+		m_tewiAnm->addPattern("wait", 0, 11);
 		m_tewiAnm->addPattern("jump", { 30, 31, 32, 33, 34, 35, 36, 40, 41, 42 });
-		m_tewiAnm->addPattern("squat", { 20, 21, 22, 23, 24 });
-		m_tewiAnm->addPattern("walk", { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59 });
+		m_tewiAnm->addPattern("squat", 20, 24);
+		m_tewiAnm->addPattern("walk", 50, 59);
 		m_tewiAnm->changePattern("wait");
 	}
 	void update() {

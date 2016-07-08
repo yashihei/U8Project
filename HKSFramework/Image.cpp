@@ -97,6 +97,13 @@ void AnimationImage::changeFrame(int value) {
 	setRect();
 }
 
+void AnimationImage::addPattern(std::string alias, int startFrame, int endFrame) {
+	std::vector<int> patternList;
+	for (int i = startFrame; i < endFrame; i++)
+		patternList.push_back(i);
+	m_patterns[alias] = patternList;
+}
+
 void AnimationImage::setRect() {
 	int nowFrame = 0;
 	//指定するパターンが無い場合

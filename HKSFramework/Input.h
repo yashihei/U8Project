@@ -20,7 +20,7 @@ enum State {
 
 class Keyboard {
 public:
-	Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
+	Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd);
 	~Keyboard();
 	void updateState();
 	bool isClicked(BYTE code) { return m_state[code][Click]; }
@@ -39,7 +39,7 @@ public:
 		Right,
 		Center,
 	};
-	Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance);
+	Mouse(LPDIRECTINPUT8 directInput, HWND hWnd);
 	~Mouse();
 	void updateState();
 	bool isClicked(Button button) { return m_state[button][Click]; }

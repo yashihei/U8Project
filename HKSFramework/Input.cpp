@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-Keyboard::Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
+Keyboard::Keyboard(LPDIRECTINPUT8 directInput, HWND hWnd) :
 m_directInputDevice(NULL)
 {
 	HRESULT hr = directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
@@ -47,7 +47,7 @@ void Keyboard::updateState() {
 }
 
 //MEMO:DirectInputだと、タブレットではマウスとして扱ってくれない
-Mouse::Mouse(LPDIRECTINPUT8 directInput, HWND hWnd, HINSTANCE hInstance) :
+Mouse::Mouse(LPDIRECTINPUT8 directInput, HWND hWnd) :
 m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 {
 	HRESULT hr = directInput->CreateDevice(GUID_SysMouse, &m_directInputDevice, NULL);
@@ -126,8 +126,8 @@ InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {
 	if (FAILED(hr))
 		throw std::runtime_error("Error initialize DirectInput");
 
-	m_keyboard = std::make_shared<Keyboard>(m_directInput, hWnd, hInstance);
-	m_mouse = std::make_shared<Mouse>(m_directInput, hWnd, hInstance);
+	m_keyboard = std::make_shared<Keyboard>(m_directInput, hWnd);
+	m_mouse = std::make_shared<Mouse>(m_directInput, hWnd);
 	m_xInput = std::make_shared<XInput>();
 }
 

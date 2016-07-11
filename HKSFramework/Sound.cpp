@@ -47,13 +47,15 @@ void SoundManager::stop(std::string alias) {
 	m_sounds[alias]->stop();
 }
 
-Sound::Sound(std::string filePath, IXAudio2* xAudio) : m_xAudio(xAudio) {
+Sound::Sound(std::string filePath, IXAudio2* xAudio) : m_xAudio(xAudio), m_sourceVoice(NULL) {
 	m_soundBuffer = std::make_shared<SoundBuffer>(filePath);
 }
 
 Sound::~Sound() {
-	m_sourceVoice->Stop();
-	m_sourceVoice->DestroyVoice();
+	if (m_sourceVoice) {
+		m_sourceVoice->Stop();
+		m_sourceVoice->DestroyVoice();
+	}
 }
 
 void Sound::init(bool loop) {

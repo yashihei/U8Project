@@ -69,7 +69,7 @@ public:
 	}
 	void draw() {
 		for (int i = m_trail.size() - 1; i > 0; i--) {
-			float alpha = 1.0 - 0.20 * i;
+			float alpha = 1.0f - 0.2f * i;
 			m_tewiAnm->draw(m_trail[i], 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, alpha), !m_dir);
 		}
 		m_tewiAnm->draw(m_pos, 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, 1.0), !m_dir);

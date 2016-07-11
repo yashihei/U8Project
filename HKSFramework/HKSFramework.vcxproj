@@ -74,7 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -82,14 +82,14 @@
     <ClCompile Include="Image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Audio.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Actor.h" />
+    <ClInclude Include="Tewi.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>

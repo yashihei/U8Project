@@ -4,7 +4,6 @@
 
 class Direct3D;
 class ImageManager;
-class AnimationImage;
 class SoundManager;
 class InputManager;
 class FPSControler;

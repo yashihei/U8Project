@@ -7,7 +7,7 @@
 #include "FPS.h"
 #include "Random.h"
 
-#include "Actor.h"
+#include "Tewi.h"
 
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
@@ -46,7 +46,6 @@ void Game::update() {
 	if (m_inputManager->isClickedButton1()) {
 		m_soundManager->play("start");
 	}
-
 	m_tewi->update();
 }
 

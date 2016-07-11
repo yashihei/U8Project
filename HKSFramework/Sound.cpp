@@ -57,6 +57,7 @@ Sound::~Sound() {
 }
 
 void Sound::init(bool loop) {
+	//TODO:–³‘Ê‚È‚±‚Æ‚µ‚Ä‚È‚¢‚©’²¸
 	HRESULT hr = m_xAudio->CreateSourceVoice(&m_sourceVoice, &m_soundBuffer->waveFormatEx);
 	if (FAILED(hr))
 		throw std::runtime_error("Error creating source voice");

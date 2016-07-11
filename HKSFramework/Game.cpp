@@ -43,9 +43,6 @@ void Game::run() {
 void Game::update() {
 	m_frameCount++;
 	m_inputManager->update();
-	if (m_inputManager->isClickedButton1()) {
-		m_soundManager->play("start");
-	}
 	m_tewi->update();
 }
 

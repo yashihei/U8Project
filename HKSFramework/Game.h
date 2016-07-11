@@ -5,7 +5,7 @@
 class Direct3D;
 class ImageManager;
 class AnimationImage;
-class AudioManager;
+class SoundManager;
 class InputManager;
 class FPSControler;
 class Random;
@@ -22,7 +22,7 @@ private:
 
 	std::shared_ptr<Direct3D> m_direct3d;
 	std::shared_ptr<ImageManager> m_imageManager;
-	std::shared_ptr<AudioManager> m_audioManager;
+	std::shared_ptr<SoundManager> m_soundManager;
 	std::shared_ptr<InputManager> m_inputManager;
 	std::shared_ptr<FPSControler> m_fpsControler;
 	std::shared_ptr<Random> m_random;

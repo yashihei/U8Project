@@ -53,9 +53,6 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FPS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -63,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

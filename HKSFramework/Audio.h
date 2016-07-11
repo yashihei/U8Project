@@ -5,32 +5,39 @@
 #include <memory>
 #include <vector>
 
-class WaveFile;
+class Sound;
+struct SoundBuffer;
 
-class AudioManager {
+class SoundManager {
 public:
-	AudioManager();
-	~AudioManager();
-	void loadWave(std::string filePath, std::string alias, bool loop = false);
-	void play(std::string alias);
+	SoundManager();
+	~SoundManager();
+	void load(std::string filePath, std::string alias);
+	void play(std::string alias, bool loop = false);
 	void stop(std::string alias);
 private:
 	IXAudio2* m_xAudio;
 	IXAudio2MasteringVoice* m_masteringVoice;
-
-	std::unordered_map<std::string, IXAudio2SourceVoice*> m_sourceVoices;
-	std::unordered_map<std::string, std::shared_ptr<WaveFile>> m_waveFiles;
-	std::unordered_map<std::string, XAUDIO2_BUFFER> m_buffer;
+	std::unordered_map<std::string, std::shared_ptr<Sound>> m_sounds;
 };
 
-class WaveFile {
+class Sound {
 public:
-	explicit WaveFile(std::string filePath);
-	DWORD getSize() const { return m_size; }
-	const WAVEFORMATEX* getFormat() const { return &m_waveFormatEx; }
-	BYTE* getData() { return m_data.data(); }
+	Sound(std::string filePath, IXAudio2* xAudio);
+	~Sound();
+	void init(bool loop = false);
+	void play();
+	void stop();
 private:
-	DWORD m_size;
-	WAVEFORMATEX m_waveFormatEx;
-	std::vector<BYTE> m_data;
+	IXAudio2* m_xAudio;
+	IXAudio2SourceVoice* m_sourceVoice;
+	std::shared_ptr<SoundBuffer> m_soundBuffer;
+};
+
+struct SoundBuffer {
+	explicit SoundBuffer(std::string filePath);
+	~SoundBuffer();
+	DWORD size;
+	WAVEFORMATEX waveFormatEx;
+	std::vector<BYTE> buffer;
 };

@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <vector>
 
-AudioManager::AudioManager() :
+SoundManager::SoundManager() :
 m_xAudio(NULL), m_masteringVoice(NULL)
 {
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -22,13 +22,10 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 		throw std::runtime_error("Error creating mastering voice");
 }
 
-AudioManager::~AudioManager()
+SoundManager::~SoundManager()
 {
-	m_waveFiles.clear();
-	for (auto& sourceVoice : m_sourceVoices) {
-		sourceVoice.second->Stop();
-		sourceVoice.second->DestroyVoice();
-	}
+	for (auto& sound : m_sounds)
+		m_sounds.clear();
 	if (m_masteringVoice)
 		m_masteringVoice->DestroyVoice();
 	if (m_xAudio)
@@ -36,37 +33,52 @@ AudioManager::~AudioManager()
 	CoUninitialize();
 }
 
-void AudioManager::loadWave(std::string filePath, std::string alias, bool loop) {
-	auto waveFile = std::make_shared<WaveFile>(filePath);
+void SoundManager::load(std::string filePath, std::string alias) {
+	auto sound = std::make_shared<Sound>(filePath, m_xAudio);
+	m_sounds[alias] = sound;
+}
 
-	IXAudio2SourceVoice* sourceVoice;
-	HRESULT hr = m_xAudio->CreateSourceVoice(&sourceVoice, waveFile->getFormat());
+void SoundManager::play(std::string alias, bool loop) {
+	m_sounds[alias]->init(loop);
+	m_sounds[alias]->play();
+}
+
+void SoundManager::stop(std::string alias) { 
+	m_sounds[alias]->stop();
+}
+
+Sound::Sound(std::string filePath, IXAudio2* xAudio) : m_xAudio(xAudio) {
+	m_soundBuffer = std::make_shared<SoundBuffer>(filePath);
+}
+
+Sound::~Sound() {
+	m_sourceVoice->Stop();
+	m_sourceVoice->DestroyVoice();
+}
+
+void Sound::init(bool loop) {
+	HRESULT hr = m_xAudio->CreateSourceVoice(&m_sourceVoice, &m_soundBuffer->waveFormatEx);
 	if (FAILED(hr))
 		throw std::runtime_error("Error creating source voice");
 
 	XAUDIO2_BUFFER buffer = {};
-	buffer.pAudioData = waveFile->getData();
+	buffer.pAudioData = m_soundBuffer->buffer.data();
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
-	buffer.AudioBytes = waveFile->getSize();
+	buffer.AudioBytes = m_soundBuffer->size;
 	buffer.LoopCount = loop ? XAUDIO2_LOOP_INFINITE : 0;
 
-	m_buffer[alias] = buffer;
-	m_waveFiles[alias] = waveFile;
-	m_sourceVoices[alias] = sourceVoice;
+	m_sourceVoice->SubmitSourceBuffer(&buffer);
 }
 
-void AudioManager::play(std::string alias) {
-	//TODO:テスト必須
-	m_xAudio->CreateSourceVoice(&m_sourceVoices[alias], m_waveFiles[alias]->getFormat());
-	m_sourceVoices[alias]->SubmitSourceBuffer(&m_buffer[alias]);
-	m_sourceVoices[alias]->Start();
+void Sound::play() {
+	m_sourceVoice->Start();
 }
 
-void AudioManager::stop(std::string alias) { 
-	m_sourceVoices[alias]->Stop();
+void Sound::stop() {
+	m_sourceVoice->Stop();
 }
 
-WaveFile::WaveFile(std::string filePath) {
+SoundBuffer::SoundBuffer(std::string filePath) {
 	HMMIO hMmio = NULL;
 	MMIOINFO mmioInfo = {};
 
@@ -86,7 +98,7 @@ WaveFile::WaveFile(std::string filePath) {
 	mmResult = mmioDescend(hMmio, &formatChunk, &riffChunk, MMIO_FINDCHUNK);
 	//TODO:error check
 
-	mmioRead(hMmio, (HPSTR)&m_waveFormatEx, formatChunk.cksize);
+	mmioRead(hMmio, (HPSTR)&waveFormatEx, formatChunk.cksize);
 	//TODO:error check
 
 	mmioAscend(hMmio, &formatChunk, 0);
@@ -96,9 +108,13 @@ WaveFile::WaveFile(std::string filePath) {
 	mmResult = mmioDescend(hMmio, &dataChunk, &riffChunk, MMIO_FINDCHUNK);
 	//TODO:error check
 
-	m_data.resize(dataChunk.cksize);
-	m_size = mmioRead(hMmio, (HPSTR)m_data.data(), dataChunk.cksize);
+	buffer.resize(dataChunk.cksize);
+	size = mmioRead(hMmio, (HPSTR)buffer.data(), dataChunk.cksize);
 	//TODO:error check
 
 	mmioClose(hMmio, 0);
+}
+
+SoundBuffer::~SoundBuffer() {
+	buffer.clear();
 }

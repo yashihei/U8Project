@@ -18,8 +18,8 @@ m_frameCount(0)
 	m_imageManager->load("dat/background.jpg", "background");
 	m_imageManager->load("dat/tewi_material01.png", "tewi01");
 
-	m_audioManager = std::make_shared<AudioManager>();
-	m_audioManager->loadWave("dat/startup.wav", "start");
+	m_soundManager = std::make_shared<SoundManager>();
+	m_soundManager->load("dat/startup.wav", "start");
 
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 	m_fpsControler = std::make_shared<FPSControler>(60);
@@ -43,6 +43,9 @@ void Game::run() {
 void Game::update() {
 	m_frameCount++;
 	m_inputManager->update();
+	if (m_inputManager->isClickedButton1()) {
+		m_soundManager->play("start");
+	}
 
 	m_tewi->update();
 }

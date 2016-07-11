@@ -25,8 +25,10 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 AudioManager::~AudioManager()
 {
 	m_waveFiles.clear();
-	for (auto& sourceVoice : m_sourceVoices)
+	for (auto& sourceVoice : m_sourceVoices) {
+		sourceVoice.second->Stop();
 		sourceVoice.second->DestroyVoice();
+	}
 	if (m_masteringVoice)
 		m_masteringVoice->DestroyVoice();
 	if (m_xAudio)
@@ -34,7 +36,7 @@ AudioManager::~AudioManager()
 	CoUninitialize();
 }
 
-void AudioManager::loadWave(std::string filePath, std::string alias) {
+void AudioManager::loadWave(std::string filePath, std::string alias, bool loop) {
 	auto waveFile = std::make_shared<WaveFile>(filePath);
 
 	IXAudio2SourceVoice* sourceVoice;
@@ -46,17 +48,21 @@ void AudioManager::loadWave(std::string filePath, std::string alias) {
 	buffer.pAudioData = waveFile->getData();
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	buffer.AudioBytes = waveFile->getSize();
-	sourceVoice->SubmitSourceBuffer(&buffer);
+	buffer.LoopCount = loop ? XAUDIO2_LOOP_INFINITE : 0;
 
+	m_buffer[alias] = buffer;
+	m_waveFiles[alias] = waveFile;
 	m_sourceVoices[alias] = sourceVoice;
-	m_waveFiles.push_back(waveFile);
 }
 
 void AudioManager::play(std::string alias) {
+	//TODO:テスト必須
+	m_xAudio->CreateSourceVoice(&m_sourceVoices[alias], m_waveFiles[alias]->getFormat());
+	m_sourceVoices[alias]->SubmitSourceBuffer(&m_buffer[alias]);
 	m_sourceVoices[alias]->Start();
 }
 
-void AudioManager::stop(std::string alias) {
+void AudioManager::stop(std::string alias) { 
 	m_sourceVoices[alias]->Stop();
 }
 

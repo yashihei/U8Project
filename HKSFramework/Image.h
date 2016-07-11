@@ -26,8 +26,8 @@ public:
 	Image(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
 	Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice);
 
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool flip = false);
-	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool flip = false);
+	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
+	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 private:
 	struct ImageVertex {
 		D3DXVECTOR3 p;
@@ -58,7 +58,7 @@ public:
 	void addPattern(std::string alias, std::vector<int> patternList) { m_patterns[alias] = patternList; }
 	void changePattern(std::string alias) { m_currentPattern = alias; m_currentFrame = 0; }
 	bool isPlaying(std::string alias) { return alias == m_currentPattern; }
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool flip = false);
+	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 private:
 	void setRect();
 	std::shared_ptr<Image> m_image;

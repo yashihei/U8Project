@@ -32,16 +32,16 @@ Image::Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice) :
 m_texture(texure), m_d3dDevice(d3dDevice)
 {}
 
-void Image::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
-	draw({ 0.0f, 0.0f, 1.0f, 1.0f }, pos, rad, scale, color, flip);
+void Image::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
+	draw({ 0.0f, 0.0f, 1.0f, 1.0f }, pos, rad, scale, color, mirror);
 }
 
 //TODO:SetStream‚ÅŽÀ‘•
-void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
+void Image::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
 	std::vector<D3DXVECTOR2> uv = {
 		{ uvRect.x, uvRect.y }, { uvRect.x + uvRect.w, uvRect.y }, { uvRect.x, uvRect.y + uvRect.h }, { uvRect.x + uvRect.w, uvRect.y + uvRect.h }
 	};
-	if (flip) {
+	if (mirror) {
 		std::swap(uv[0], uv[1]);
 		std::swap(uv[2], uv[3]);
 	}
@@ -121,6 +121,6 @@ void AnimationImage::setRect() {
 	m_uvRect.y = offsetV * m_uvRect.h;
 }
 
-void AnimationImage::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool flip) {
-	m_image->draw(m_uvRect, pos, rad, scale, color, flip);
+void AnimationImage::draw(D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
+	m_image->draw(m_uvRect, pos, rad, scale, color, mirror);
 }

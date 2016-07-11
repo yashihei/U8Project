@@ -3,7 +3,7 @@
 #include "Direct3D.h"
 #include "Image.h"
 #include "Input.h"
-#include "Audio.h"
+#include "Sound.h"
 #include "FPS.h"
 #include "Random.h"
 

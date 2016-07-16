@@ -2,17 +2,17 @@
 #include <memory>
 #include <deque>
 
-#include "Image.h"
+#include "Texture.h"
 #include "Input.h"
 #include "Util.h"
 
 class Tewi {
 public:
-	Tewi(std::shared_ptr<ImageManager> imageManager, std::shared_ptr<InputManager> inputManager) :
+	Tewi(std::shared_ptr<TextureManager> textureManager, std::shared_ptr<InputManager> inputManager) :
 		m_inputManager(inputManager),
 		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(true)
 	{
-		m_tewiAnm = std::make_shared<AnimationImage>(imageManager->getImage("tewi01"), 10, 8);
+		m_tewiAnm = std::make_shared<Animation>(textureManager->getTexture("tewi01"), 10, 8);
 		m_tewiAnm->addPattern("wait", 0, 11);
 		m_tewiAnm->addPattern("jump", { 30, 31, 32, 33, 34, 35, 36, 40, 41, 42 });
 		m_tewiAnm->addPattern("squat", 20, 24);
@@ -77,7 +77,7 @@ public:
 	D3DXVECTOR2 getPos() { return m_pos; }
 private:
 	std::shared_ptr<InputManager> m_inputManager;
-	std::shared_ptr<AnimationImage> m_tewiAnm;
+	std::shared_ptr<Animation> m_tewiAnm;
 
 	D3DXVECTOR2 m_pos, m_vec;
 	bool m_jump;

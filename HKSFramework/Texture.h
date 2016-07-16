@@ -5,53 +5,43 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-class Texture {
-public:
-	Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
-	~Texture();
-	LPDIRECT3DTEXTURE9 getTexture() const { return m_d3dTex; }
-	D3DXVECTOR2 getSize() const { return m_size; }
-private:
-	LPDIRECT3DTEXTURE9 m_d3dTex;
-	D3DXVECTOR2 m_size;
-};
-
 struct RectF {
 	RectF(float x, float y, float w, float h) : x(x), y(y), w(w), h(h) {}
 	float x, y, w, h;
 };
 
-class Image {
+class Texture {
 public:
-	Image(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
-	Image(std::shared_ptr<Texture> texure, LPDIRECT3DDEVICE9 d3dDevice);
+	Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice);
+	~Texture();
 
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 private:
-	struct ImageVertex {
+	struct TextureVertex {
 		D3DXVECTOR3 p;
 		float rhw;
 		DWORD color;
 		D3DXVECTOR2 t;
 	};
-	std::shared_ptr<Texture> m_texture;
+	LPDIRECT3DTEXTURE9 m_d3dTex;
 	LPDIRECT3DDEVICE9 m_d3dDevice;
+	D3DXVECTOR2 m_size;
 };
 
-class ImageManager {
+class TextureManager {
 public:
-	ImageManager(LPDIRECT3DDEVICE9 d3dDevice);
+	TextureManager(LPDIRECT3DDEVICE9 d3dDevice);
 	void load(std::string filePath, std::string alias);
-	std::shared_ptr<Image> getImage(std::string alias) { return m_images[alias]; }
+	std::shared_ptr<Texture> getTexture(std::string alias) { return m_textures[alias]; }
 private:
-	std::unordered_map<std::string, std::shared_ptr<Image>> m_images;
+	std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 	LPDIRECT3DDEVICE9 m_d3dDevice;
 };
 
-class AnimationImage {
+class Animation {
 public:
-	AnimationImage(std::shared_ptr<Image> image, int col, int row);
+	Animation(std::shared_ptr<Texture> texture, int col, int row);
 	void addvanceFrame();
 	void changeFrame(int value);
 	void addPattern(std::string alias, int startFrame, int endFrame);
@@ -61,7 +51,7 @@ public:
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 private:
 	void setRect();
-	std::shared_ptr<Image> m_image;
+	std::shared_ptr<Texture> m_texture;
 	int m_col, m_row, m_currentFrame;
 	RectF m_uvRect;
 	std::string m_currentPattern;

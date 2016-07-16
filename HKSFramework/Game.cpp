@@ -1,7 +1,7 @@
 #include "Game.h"
 
 #include "Direct3D.h"
-#include "Image.h"
+#include "Texture.h"
 #include "Input.h"
 #include "Sound.h"
 #include "FPS.h"
@@ -14,9 +14,9 @@ m_frameCount(0)
 {
 	m_direct3d = std::make_shared<Direct3D>(hWnd);
 
-	m_imageManager = std::make_shared<ImageManager>(m_direct3d->getDevice());
-	m_imageManager->load("dat/background.jpg", "background");
-	m_imageManager->load("dat/tewi_material01.png", "tewi01");
+	m_textureManager = std::make_shared<TextureManager>(m_direct3d->getDevice());
+	m_textureManager->load("dat/background.jpg", "background");
+	m_textureManager->load("dat/tewi_material01.png", "tewi01");
 
 	m_soundManager = std::make_shared<SoundManager>();
 	m_soundManager->load("dat/startup.wav", "start");
@@ -25,7 +25,7 @@ m_frameCount(0)
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
 	
-	m_tewi = std::make_shared<Tewi>(m_imageManager, m_inputManager);
+	m_tewi = std::make_shared<Tewi>(m_textureManager, m_inputManager);
 }
 
 Game::~Game() {}
@@ -47,6 +47,6 @@ void Game::update() {
 }
 
 void Game::draw() {
-	m_imageManager->getImage("background")->draw({ 320, 240 });
+	m_textureManager->getTexture("background")->draw({ 320, 240 });
 	m_tewi->draw();
 }

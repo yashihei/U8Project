@@ -3,7 +3,7 @@
 #include <memory>
 
 class Direct3D;
-class ImageManager;
+class TextureManager;
 class SoundManager;
 class InputManager;
 class FPSControler;
@@ -20,7 +20,7 @@ private:
 	void draw();
 
 	std::shared_ptr<Direct3D> m_direct3d;
-	std::shared_ptr<ImageManager> m_imageManager;
+	std::shared_ptr<TextureManager> m_textureManager;
 	std::shared_ptr<SoundManager> m_soundManager;
 	std::shared_ptr<InputManager> m_inputManager;
 	std::shared_ptr<FPSControler> m_fpsControler;

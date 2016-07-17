@@ -7,6 +7,8 @@
 #include "FPS.h"
 #include "Random.h"
 
+#include "Tewi.h"
+
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
 {
@@ -22,6 +24,8 @@ m_frameCount(0)
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
+
+	m_tewi = std::make_shared<Tewi>(m_textureManager, m_inputManager);
 }
 
 Game::~Game() {}
@@ -39,8 +43,10 @@ void Game::run() {
 void Game::update() {
 	m_frameCount++;
 	m_inputManager->update();
+	m_tewi->update();
 }
 
 void Game::draw() {
 	m_textureManager->getTexture("background")->draw({ 320, 240 });
+	m_tewi->draw();
 }

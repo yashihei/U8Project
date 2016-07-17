@@ -17,6 +17,7 @@ public:
 
 	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 	void draw(RectF uvRect, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
+	void drawFrame(int col, int row, int index, D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
 private:
 	struct TextureVertex {
 		D3DXVECTOR3 p;
@@ -37,23 +38,4 @@ public:
 private:
 	std::unordered_map<std::string, std::shared_ptr<Texture>> m_textures;
 	LPDIRECT3DDEVICE9 m_d3dDevice;
-};
-
-class Animation {
-public:
-	Animation(std::shared_ptr<Texture> texture, int col, int row);
-	void addvanceFrame();
-	void changeFrame(int value);
-	void addPattern(std::string alias, int startFrame, int endFrame);
-	void addPattern(std::string alias, std::vector<int> patternList) { m_patterns[alias] = patternList; }
-	void changePattern(std::string alias) { m_currentPattern = alias; m_currentFrame = 0; }
-	bool isPlaying(std::string alias) { return alias == m_currentPattern; }
-	void draw(D3DXVECTOR2 pos, float rad = 0.0f, float scale = 1.0f, const D3DXCOLOR& color = 0xFFFFFFFF, bool mirror = false);
-private:
-	void setRect();
-	std::shared_ptr<Texture> m_texture;
-	int m_col, m_row, m_currentFrame;
-	RectF m_uvRect;
-	std::string m_currentPattern;
-	std::unordered_map<std::string, std::vector<int>> m_patterns;
 };

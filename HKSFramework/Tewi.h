@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "Input.h"
 #include "Util.h"
+#include "Animation.h"
 
 class Tewi {
 public:
@@ -12,7 +13,7 @@ public:
 		m_inputManager(inputManager),
 		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(false)
 	{
-		m_tewiAnm = std::make_shared<Animation>(textureManager->getTexture("tewi01"), 10, 8);
+		m_tewiAnm = std::make_shared<Animation>(textureManager->getTexture("tewi01"), 10, 8, 5);
 		m_tewiAnm->addPattern("wait", 0, 11);
 		m_tewiAnm->addPattern("jump", { 30, 31, 32, 33, 34, 35, 36, 40, 41, 42 });
 		m_tewiAnm->addPattern("squat", 20, 24);
@@ -21,8 +22,7 @@ public:
 	}
 	void update() {
 		m_cnt++;
-		if (m_cnt % 5 == 0)
-			m_tewiAnm->addvanceFrame();
+		m_tewiAnm->update();
 
 		if (!m_jump) {
 			if (m_inputManager->isPressedLeft() || m_inputManager->isPressedRight()) {
@@ -41,7 +41,7 @@ public:
 			m_dir = false;
 			m_pos += D3DXVECTOR2(5.0f, 0.0f);
 		}
-		m_pos.x = Util::clamp(m_pos.x, 0.0f, 640.0f);
+		m_pos.x = clamp(m_pos.x, 0.0f, 640.0f);
 
 		//jump
 		m_vec += D3DXVECTOR2(0.0f, 0.7f);

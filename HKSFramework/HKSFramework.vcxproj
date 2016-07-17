@@ -90,7 +90,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Point.h" />
-    <ClInclude Include="Tewi.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.h" />

@@ -59,9 +59,6 @@
     <ClInclude Include="Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tewi.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>

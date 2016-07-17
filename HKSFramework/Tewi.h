@@ -10,7 +10,7 @@ class Tewi {
 public:
 	Tewi(std::shared_ptr<TextureManager> textureManager, std::shared_ptr<InputManager> inputManager) :
 		m_inputManager(inputManager),
-		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(true)
+		m_pos(320, 400), m_vec(0, 0), m_cnt(0), m_jump(false), m_dir(false)
 	{
 		m_tewiAnm = std::make_shared<Animation>(textureManager->getTexture("tewi01"), 10, 8);
 		m_tewiAnm->addPattern("wait", 0, 11);
@@ -35,10 +35,10 @@ public:
 		}
 		//move
 		if (m_inputManager->isPressedLeft()) {
-			m_dir = false;
+			m_dir = true;
 			m_pos += D3DXVECTOR2(-5.0f, 0.0f);
 		} else if (m_inputManager->isPressedRight()) {
-			m_dir = true;
+			m_dir = false;
 			m_pos += D3DXVECTOR2(5.0f, 0.0f);
 		}
 		m_pos.x = Util::clamp(m_pos.x, 0.0f, 640.0f);
@@ -70,9 +70,9 @@ public:
 	void draw() {
 		for (int i = m_trail.size() - 1; i > 0; i--) {
 			float alpha = 1.0f - 0.2f * i;
-			m_tewiAnm->draw(m_trail[i], 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, alpha), !m_dir);
+			m_tewiAnm->draw(m_trail[i], 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, alpha), m_dir);
 		}
-		m_tewiAnm->draw(m_pos, 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, 1.0), !m_dir);
+		m_tewiAnm->draw(m_pos, 0.0, 1.5, D3DXCOLOR(1.0, 1.0, 1.0, 1.0), m_dir);
 	}
 	D3DXVECTOR2 getPos() { return m_pos; }
 private:

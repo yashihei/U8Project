@@ -75,12 +75,13 @@ public:
 	bool isClicked(Button button) { return m_state[button][Click]; }
 	bool isPressed(Button button) { return m_state[button][Press]; }
 	bool isReleased(Button button) { return m_state[button][Release]; }
-	//D3DXVECTOR2 getLeftThumbDir();
-	//D3DXVECTOR2 getRightThumbDir();
+	D3DXVECTOR2 getLeftStickDir();
+	D3DXVECTOR2 getRightStickDir();
 private:
 	static const int buttonNum = 14;
 	int m_index;
 	std::array<std::bitset<StateNum>, buttonNum> m_state;
+	XINPUT_STATE m_xInputState;
 };
 
 class InputManager {
@@ -115,6 +116,10 @@ public:
 	bool isReleasedDown()    const { return m_keyboard->isReleased(DIK_DOWN) | m_xInput->isReleased(XInput::Down); }
 	bool isReleasedLeft()    const { return m_keyboard->isReleased(DIK_LEFT) | m_xInput->isReleased(XInput::Left); }
 	bool isReleasedRight()   const { return m_keyboard->isReleased(DIK_RIGHT) | m_xInput->isReleased(XInput::Right); }
+
+	std::shared_ptr<Keyboard> getKeyboard() { return m_keyboard; }
+	std::shared_ptr<Mouse> getMouse() { return m_mouse; }
+	std::shared_ptr<XInput> getXInput() { return m_xInput; }
 private:
 	LPDIRECTINPUT8 m_directInput;
 	std::shared_ptr<Keyboard> m_keyboard;

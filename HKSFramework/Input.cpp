@@ -7,7 +7,7 @@ m_directInputDevice(NULL)
 {
 	HRESULT hr = directInput->CreateDevice(GUID_SysKeyboard, &m_directInputDevice, NULL);
 	if (FAILED(hr))
-		throw std::runtime_error("Error create DirectInput Device");
+		throw std::runtime_error("Error create DirectInput Device(Keyboard)");
 
 	//データ形式の設定
 	hr = m_directInputDevice->SetDataFormat(&c_dfDIKeyboard);
@@ -52,7 +52,7 @@ m_directInputDevice(NULL), m_hWnd(hWnd), m_cursorPos(0, 0)
 {
 	HRESULT hr = directInput->CreateDevice(GUID_SysMouse, &m_directInputDevice, NULL);
 	if (FAILED(hr))
-		throw std::runtime_error("Error create DirectInput Device");
+		throw std::runtime_error("Error create DirectInput Device(Mouse)");
 
 	//mouse→ボタン4つ mouse2→最大ボタン8つ
 	hr = m_directInputDevice->SetDataFormat(&c_dfDIMouse);
@@ -101,24 +101,53 @@ void Mouse::updateState() {
 XInput::XInput(int index) :
 m_index(index)
 {
-	m_state.fill(std::bitset<4>());
+	m_state.fill(std::bitset<StateNum>());
 }
 
 void XInput::updateState() {
-	XINPUT_STATE xInputState = {};
-	auto res = XInputGetState(m_index, &xInputState);
-	if (res == ERROR_DEVICE_NOT_CONNECTED)
+	auto res = XInputGetState(m_index, &m_xInputState);
+	if (res == ERROR_DEVICE_NOT_CONNECTED) {
+		m_state.fill(std::bitset<StateNum>());
 		return;
-	//TODO:繋がっていなかった場合の処理
+	}
 
 	int buttonIndex = 1;
 	for (int i = 0; i < buttonNum; i++) {
-		m_state[i][Press] = (xInputState.Gamepad.wButtons & buttonIndex) != 0;
+		m_state[i][Press] = (m_xInputState.Gamepad.wButtons & buttonIndex) != 0;
 		m_state[i][Click] = (m_state[i][Press] ^ m_state[i][Prev]) & m_state[i][Press];
 		m_state[i][Release] = (m_state[i][Press] ^ m_state[i][Prev]) & !m_state[i][Press];
 		m_state[i][Prev] = m_state[i][Press];
 		buttonIndex *= (buttonIndex != 0x0200) ? 2 : 8;
 	}
+
+	//check deadzone
+	const SHORT leftDeadZone = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+	if ((m_xInputState.Gamepad.sThumbLX < leftDeadZone && m_xInputState.Gamepad.sThumbLX > -leftDeadZone) &&
+		(m_xInputState.Gamepad.sThumbLY < leftDeadZone && m_xInputState.Gamepad.sThumbLY > -leftDeadZone))
+	{
+		m_xInputState.Gamepad.sThumbLX = 0;
+		m_xInputState.Gamepad.sThumbLY = 0;
+	}
+	const SHORT rightDeadZone = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+	if ((m_xInputState.Gamepad.sThumbRX < rightDeadZone && m_xInputState.Gamepad.sThumbRX > -rightDeadZone) &&
+		(m_xInputState.Gamepad.sThumbRY < rightDeadZone && m_xInputState.Gamepad.sThumbRY > -rightDeadZone))
+	{
+		m_xInputState.Gamepad.sThumbRX = 0;
+		m_xInputState.Gamepad.sThumbRY = 0;
+	}
+}
+
+//-1.0~1.0までの正規化した値を返す
+float normalized(SHORT n) {
+	return static_cast<float>(n) / 0x7FFF;
+}
+
+D3DXVECTOR2 XInput::getLeftStickDir() {
+	return{ normalized(m_xInputState.Gamepad.sThumbLX), normalized(m_xInputState.Gamepad.sThumbLY) };
+}
+
+D3DXVECTOR2 XInput::getRightStickDir() {
+	return{ normalized(m_xInputState.Gamepad.sThumbRX), normalized(m_xInputState.Gamepad.sThumbRY) };
 }
 
 InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {

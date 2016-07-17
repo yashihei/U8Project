@@ -8,7 +8,6 @@ class SoundManager;
 class InputManager;
 class FPSControler;
 class Random;
-class Tewi;
 
 class Game {
 public:
@@ -25,6 +24,5 @@ private:
 	std::shared_ptr<InputManager> m_inputManager;
 	std::shared_ptr<FPSControler> m_fpsControler;
 	std::shared_ptr<Random> m_random;
-	std::shared_ptr<Tewi> m_tewi;
 	int m_frameCount;
 };

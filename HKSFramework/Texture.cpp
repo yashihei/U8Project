@@ -42,7 +42,6 @@ void Texture::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const 
 	}
 
 	//ƒAƒtƒBƒ“•ÏŠ·
-	//‰ñ“]¨Šg‘å¨ˆÚ“®
 	for (int i = 0; i < 4; i++) {
 		auto tPos = vtx[i].p;
 		vtx[i].p.x = pos.x + scale * (tPos.x * std::cos(rad) - tPos.y * std::sin(rad));

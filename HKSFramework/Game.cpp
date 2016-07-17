@@ -7,8 +7,6 @@
 #include "FPS.h"
 #include "Random.h"
 
-#include "Tewi.h"
-
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
 {
@@ -16,7 +14,6 @@ m_frameCount(0)
 
 	m_textureManager = std::make_shared<TextureManager>(m_direct3d->getDevice());
 	m_textureManager->load("dat/background.jpg", "background");
-	m_textureManager->load("dat/tewi_material01.png", "tewi01");
 
 	m_soundManager = std::make_shared<SoundManager>();
 	m_soundManager->load("dat/startup.wav", "start");
@@ -24,8 +21,6 @@ m_frameCount(0)
 	m_inputManager = std::make_shared<InputManager>(hWnd, hInstance);
 	m_fpsControler = std::make_shared<FPSControler>(60);
 	m_random = std::make_shared<Random>();
-
-	m_tewi = std::make_shared<Tewi>(m_textureManager, m_inputManager);
 }
 
 Game::~Game() {}
@@ -43,10 +38,8 @@ void Game::run() {
 void Game::update() {
 	m_frameCount++;
 	m_inputManager->update();
-	m_tewi->update();
 }
 
 void Game::draw() {
 	m_textureManager->getTexture("background")->draw({ 320, 240 });
-	m_tewi->draw();
 }

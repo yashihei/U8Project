@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -83,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Direct3D.h" />

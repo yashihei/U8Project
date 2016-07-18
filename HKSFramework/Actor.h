@@ -5,15 +5,15 @@
 
 class Actor {
 public:
-	Actor() : enable(true) {}
+	Actor() : m_enable(true) {}
 	virtual ~Actor() = default;
 	virtual void update() = 0;
 	virtual void draw() = 0;
 
-	void kill() { enable = false; }
-	bool isEnabled() const { return enable; }
+	void kill() { m_enable = false; }
+	bool isEnabled() const { return m_enable; }
 private:
-	bool enable;
+	bool m_enable;
 };
 
 template<typename Type>

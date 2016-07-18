@@ -6,6 +6,8 @@
 #include "Sound.h"
 #include "FPS.h"
 #include "Random.h"
+#include "Shape.h"
+#include "Util.h"
 
 Game::Game(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
@@ -13,7 +15,7 @@ m_frameCount(0)
 	m_direct3d = std::make_shared<Direct3D>(hWnd);
 
 	m_textureManager = std::make_shared<TextureManager>(m_direct3d->getDevice());
-	m_textureManager->load("dat/background.jpg", "background");
+	m_textureManager->load("dat/car000.png", "car");
 
 	m_soundManager = std::make_shared<SoundManager>();
 	m_soundManager->load("dat/startup.wav", "start");
@@ -38,8 +40,8 @@ void Game::run() {
 void Game::update() {
 	m_frameCount++;
 	m_inputManager->update();
+	OutputDebugValue(m_fpsControler->getFps());
 }
 
 void Game::draw() {
-	m_textureManager->getTexture("background")->draw({ 320, 240 });
 }

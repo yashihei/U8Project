@@ -86,6 +86,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="FPS.h" />

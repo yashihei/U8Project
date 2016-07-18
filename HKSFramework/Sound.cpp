@@ -24,8 +24,7 @@ m_xAudio(NULL), m_masteringVoice(NULL)
 
 SoundManager::~SoundManager()
 {
-	for (auto& sound : m_sounds)
-		m_sounds.clear();
+	m_sounds.clear();
 	if (m_masteringVoice)
 		m_masteringVoice->DestroyVoice();
 	if (m_xAudio)

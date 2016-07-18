@@ -63,6 +63,7 @@ void Texture::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const 
 	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 	m_d3dDevice->SetTexture(0, m_d3dTex);
 	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(TextureVertex));
+	m_d3dDevice->SetTexture(0, NULL);
 }
 
 TextureManager::TextureManager(LPDIRECT3DDEVICE9 d3dDevice) :

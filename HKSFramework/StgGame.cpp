@@ -10,8 +10,13 @@
 #include "Actors.h"
 
 StgGame::StgGame(HWND hWnd, HINSTANCE hInstance) :
-GameApp(hWnd, hInstance)
+GameApp(hWnd, hInstance), m_gameover(false)
 {
+	m_textureManager->load("dat/car000.png", "car");
+	m_textureManager->load("dat/gameover.png", "gameover");
+	m_soundManager->load("dat/startup.wav", "start");
+	m_soundManager->load("dat/burn.wav", "burn");
+
 	m_player = std::make_shared<Player>(this, m_inputManager, m_graphics);
 	m_shots = std::make_shared<ActorManager<Shot>>();
 	m_enemies = std::make_shared<ActorManager<Enemy>>();

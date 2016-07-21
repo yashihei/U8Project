@@ -2,14 +2,11 @@
 
 #include <vector>
 
-Texture::Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice) :
-m_d3dTex(NULL), m_d3dDevice(d3dDevice)
+Texture::Texture(std::string filePath, std::shared_ptr<Graphics> graphics) :
+m_d3dTex(NULL), m_graphics(graphics)
 {
-	HRESULT hr = D3DXCreateTextureFromFile(d3dDevice, filePath.c_str(), &m_d3dTex);
-	if (FAILED(hr)) {
-		throw std::runtime_error("Failed load " + filePath);
-	}
-	
+	m_d3dTex = m_graphics->loadTexture(filePath);
+
 	//テクスチャのサイズを取得
 	D3DXIMAGE_INFO info;
 	D3DXGetImageInfoFromFile(filePath.c_str(), &info);
@@ -34,10 +31,8 @@ void Texture::drawFrame(int col, int row, int index, D3DXVECTOR2 pos, float rad,
 	draw(uvRect, pos, rad, scale, color, mirror);
 }
 
-//TODO:SetStreamで実装
 void Texture::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const D3DXCOLOR& color, bool mirror) {
-	auto texSize = m_size;
-	texSize.x *= uvRect.w, texSize.y *= uvRect.h;
+	auto texSize = D3DXVECTOR2(m_size.x * uvRect.w, m_size.y * uvRect.h);
 	std::vector<TextureVertex> vtx {
 		{ { -texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, color, { uvRect.x, uvRect.y } },
 		{ { texSize.x/2, -texSize.y/2, 0.0f }, 1.0f, color, { uvRect.x + uvRect.w, uvRect.y } },
@@ -56,20 +51,13 @@ void Texture::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const 
 		vtx[i].p.y = pos.y + scale * (tPos.x * std::sin(rad) + tPos.y * std::cos(rad));
 	}
 
-	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-
-	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
-	m_d3dDevice->SetTexture(0, m_d3dTex);
-	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(TextureVertex));
-	m_d3dDevice->SetTexture(0, NULL);
+	m_graphics->drawTexture(m_d3dTex, vtx);
 }
 
-TextureManager::TextureManager(LPDIRECT3DDEVICE9 d3dDevice) :
-m_d3dDevice(d3dDevice)
+TextureManager::TextureManager(std::shared_ptr<Graphics> graphics) :
+m_graphics(graphics)
 {}
 
 void TextureManager::load(std::string filePath, std::string alias) {
-	m_textures[alias] = std::make_shared<Texture>(filePath, m_d3dDevice);
+	m_textures[alias] = std::make_shared<Texture>(filePath, m_graphics);
 }

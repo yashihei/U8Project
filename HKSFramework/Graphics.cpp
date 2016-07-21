@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include "Texture.h"
 
 Graphics::Graphics(HWND hWnd) : m_d3d(NULL), m_d3dDevice(NULL) {
 	if ((m_d3d = Direct3DCreate9(D3D_SDK_VERSION)) == NULL) {
@@ -59,14 +60,27 @@ HRESULT Graphics::present() {
 	return m_d3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-namespace {
-	struct ShapeVertex {
-		D3DXVECTOR3 p;
-		float rhw;
-		DWORD color;
-	};
+LPDIRECT3DTEXTURE9 Graphics::loadTexture(std::string filePath) {
+	LPDIRECT3DTEXTURE9 d3dTex;
+	HRESULT hr = D3DXCreateTextureFromFile(m_d3dDevice, filePath.c_str(), &d3dTex);
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed load " + filePath);
+	}
+	return d3dTex;
 }
 
+void Graphics::drawTexture(LPDIRECT3DTEXTURE9 texture, const std::vector<TextureVertex>& vtx) {
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
+	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+	m_d3dDevice->SetTexture(0, texture);
+	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(TextureVertex));
+	m_d3dDevice->SetTexture(0, NULL);
+}
+
+//D3DXLINEAd‚¢‚Ì‚Å‚ ‚Ü‚èŽg‚í‚È‚¢‚±‚Æ
 void Graphics::drawLine(D3DXVECTOR2 start, D3DXVECTOR2 end, float width, D3DXCOLOR color) {
 	static LPD3DXLINE line = nullptr;
 	if (!line)
@@ -78,15 +92,24 @@ void Graphics::drawLine(D3DXVECTOR2 start, D3DXVECTOR2 end, float width, D3DXCOL
 	line->End();
 }
 
+namespace {
+	struct ShapeVertex {
+		D3DXVECTOR3 p;
+		float rhw;
+		DWORD color;
+	};
+}
+
 void Graphics::drawCircle(D3DXVECTOR2 pos, int radius, D3DXCOLOR color) {
-	std::vector<ShapeVertex> vtx(64, { { 0, 0, 0 }, 1, color });
-	for (int i = 0; i < 64; i++) {
-		float radian = D3DX_PI * 2 * i / 64;
+	static const int splitNum = 64;
+	std::vector<ShapeVertex> vtx(splitNum, { { 0, 0, 0 }, 1, color });
+	for (int i = 0; i < splitNum; i++) {
+		float radian = D3DX_PI * 2 * i / splitNum;
 		vtx[i].p.x = pos.x + radius * std::cos(radian);
 		vtx[i].p.y = pos.y + radius * std::sin(radian);
 	}
 	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
-	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 62, vtx.data(), sizeof(ShapeVertex));
+	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, splitNum - 2, vtx.data(), sizeof(ShapeVertex));
 }
 
 void Graphics::drawRectangle(D3DXVECTOR2 pos, float width, float height, float rad, D3DXCOLOR color) {

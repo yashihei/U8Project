@@ -80,6 +80,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StgGame.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="StgGame.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
-#include "Game.h"
+#include "StgGame.h"
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 bool registerMyClass(HINSTANCE hInstance);
@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 
 	try {
-		auto game = std::make_unique<Game>(hWnd, hInstance);
+		auto game = std::make_unique<StgGame>(hWnd, hInstance);
 
 		while (true) {
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

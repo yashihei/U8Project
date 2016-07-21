@@ -9,23 +9,14 @@ class InputManager;
 class FPSControler;
 class Random;
 
-#include <d3dx9.h>
-#include "Actor.h"
-class Player;
-class Shot;
-class Enemy;
-
 class GameApp {
 public:
 	GameApp(HWND hWnd, HINSTANCE hInstance);
-	~GameApp();
+	virtual ~GameApp() = default;
 	void run();
-
-	void addShot(D3DXVECTOR2 pos, D3DXVECTOR2 vec);
-	D3DXVECTOR2 getPlayerPos();
-private:
-	void update();
-	void draw();
+protected:
+	virtual void update() = 0;
+	virtual void draw() = 0;
 
 	std::shared_ptr<Direct3D> m_direct3d;
 	std::shared_ptr<TextureManager> m_textureManager;
@@ -34,9 +25,4 @@ private:
 	std::shared_ptr<FPSControler> m_fpsControler;
 	std::shared_ptr<Random> m_random;
 	int m_frameCount;
-
-	std::shared_ptr<Player> m_player;
-	std::shared_ptr<ActorManager<Shot>> m_shots;
-	std::shared_ptr<ActorManager<Enemy>> m_enemies;
-	bool m_gameover;
 };

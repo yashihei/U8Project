@@ -1,13 +1,13 @@
 #pragma once
 #include <d3dx9.h>
-#include "Shape.h"
 #include "Actor.h"
 #include "Input.h"
-#include "Game.h"
+#include "Shape.h"
+#include "StgGame.h"
 
 class Player {
 public:
-	Player(GameApp* game, std::shared_ptr<InputManager> inputManager) :
+	Player(StgGame* game, std::shared_ptr<InputManager> inputManager) :
 	m_pos(320, 240), m_vec(0.0, 0.0), m_frameCount(0), m_game(game), m_inputManager(inputManager)
 	{}
 	void update() {
@@ -31,7 +31,7 @@ public:
 private:
 	D3DXVECTOR2 m_pos, m_vec;
 	int m_frameCount;
-	GameApp* m_game;
+	StgGame* m_game;
 	std::shared_ptr<InputManager> m_inputManager;
 };
 
@@ -51,7 +51,7 @@ private:
 
 class Enemy : public Actor {
 public:
-	Enemy(D3DXVECTOR2 pos, GameApp* game) : m_pos(pos), m_rad(0), m_game(game) {}
+	Enemy(D3DXVECTOR2 pos, StgGame* game) : m_pos(pos), m_rad(0), m_game(game) {}
 	void update() override {
 		auto dis = m_game->getPlayerPos() - m_pos;
 		float rad = std::atan2(dis.y, dis.x);
@@ -65,5 +65,5 @@ public:
 private:
 	D3DXVECTOR2 m_pos;
 	float m_rad;
-	GameApp* m_game;
+	StgGame* m_game;
 };

@@ -3,7 +3,6 @@
 #include <vector>
 #include <cmath>
 
-//TODO:クラス化
 namespace Shape {
 	struct ShapeVertex {
 		D3DXVECTOR3 p;
@@ -11,13 +10,14 @@ namespace Shape {
 		DWORD color;
 	};
 	LPDIRECT3DDEVICE9 d3dDevice;
-	LPD3DXLINE line;
 	void init(LPDIRECT3DDEVICE9 device) {
 		d3dDevice = device;
-		D3DXCreateLine(d3dDevice, &line);
 	}
 	//LPD3DXLINEが実用性に欠ける重さなので、主にデバッグ用として
 	void drawLine(D3DXVECTOR2 start, D3DXVECTOR2 end, float width = 1, D3DXCOLOR color = 0xFFFFFFFF) {
+		static LPD3DXLINE line = nullptr;
+		if (!line)
+			D3DXCreateLine(d3dDevice, &line);
 		D3DXVECTOR2 vec[] = { start, end };
 		line->SetWidth(width);
 		line->Begin();

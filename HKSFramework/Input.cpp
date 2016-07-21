@@ -142,12 +142,12 @@ float normalized(SHORT n) {
 	return static_cast<float>(n) / 0x7FFF;
 }
 
-D3DXVECTOR2 XInput::getLeftStickDir() {
-	return{ normalized(m_xInputState.Gamepad.sThumbLX), normalized(m_xInputState.Gamepad.sThumbLY) };
+D3DXVECTOR2 XInput::getLeftThumb() {
+	return{ normalized(m_xInputState.Gamepad.sThumbLX), -normalized(m_xInputState.Gamepad.sThumbLY) };
 }
 
-D3DXVECTOR2 XInput::getRightStickDir() {
-	return{ normalized(m_xInputState.Gamepad.sThumbRX), normalized(m_xInputState.Gamepad.sThumbRY) };
+D3DXVECTOR2 XInput::getRightThumb() {
+	return{ normalized(m_xInputState.Gamepad.sThumbRX), -normalized(m_xInputState.Gamepad.sThumbRY) };
 }
 
 InputManager::InputManager(HWND hWnd, HINSTANCE hInstance) {

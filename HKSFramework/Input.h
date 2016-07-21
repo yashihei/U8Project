@@ -75,8 +75,8 @@ public:
 	bool isClicked(Button button) { return m_state[button][Click]; }
 	bool isPressed(Button button) { return m_state[button][Press]; }
 	bool isReleased(Button button) { return m_state[button][Release]; }
-	D3DXVECTOR2 getLeftStickDir();
-	D3DXVECTOR2 getRightStickDir();
+	D3DXVECTOR2 getLeftThumb();
+	D3DXVECTOR2 getRightThumb();
 private:
 	static const int buttonNum = 14;
 	int m_index;

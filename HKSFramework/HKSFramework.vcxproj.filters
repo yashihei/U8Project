@@ -21,16 +21,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Source Files\hks</Filter>
     </ClCompile>
     <ClCompile Include="Direct3D.cpp">
-      <Filter>Source Files\hks</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
       <Filter>Source Files\hks</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
@@ -44,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="StgGame.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameApp.cpp">
+      <Filter>Source Files\hks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,9 +60,6 @@
       <Filter>Header Files\hks</Filter>
     </ClInclude>
     <ClInclude Include="FPS.h">
-      <Filter>Header Files\hks</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
@@ -91,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="StgGame.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameApp.h">
+      <Filter>Header Files\hks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -77,9 +77,9 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Direct3D.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="StgGame.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="FPS.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameApp.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Random.h" />

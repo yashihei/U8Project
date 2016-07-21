@@ -2,7 +2,7 @@
 #include <memory>
 #include <d3dx9.h>
 #include "Actor.h"
-#include "Game.h"
+#include "GameApp.h"
 
 class Player;
 class Shot;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 
+//TODO:クラス化
 namespace Shape {
 	struct ShapeVertex {
 		D3DXVECTOR3 p;
@@ -15,6 +16,7 @@ namespace Shape {
 		d3dDevice = device;
 		D3DXCreateLine(d3dDevice, &line);
 	}
+	//LPD3DXLINEが実用性に欠ける重さなので、主にデバッグ用として
 	void drawLine(D3DXVECTOR2 start, D3DXVECTOR2 end, float width = 1, D3DXCOLOR color = 0xFFFFFFFF) {
 		D3DXVECTOR2 vec[] = { start, end };
 		line->SetWidth(width);

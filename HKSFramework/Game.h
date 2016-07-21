@@ -9,11 +9,20 @@ class InputManager;
 class FPSControler;
 class Random;
 
-class Game {
+#include <d3dx9.h>
+#include "Actor.h"
+class Player;
+class Shot;
+class Enemy;
+
+class GameApp {
 public:
-	Game(HWND hWnd, HINSTANCE hInstance);
-	~Game();
+	GameApp(HWND hWnd, HINSTANCE hInstance);
+	~GameApp();
 	void run();
+
+	void addShot(D3DXVECTOR2 pos, D3DXVECTOR2 vec);
+	D3DXVECTOR2 getPlayerPos();
 private:
 	void update();
 	void draw();
@@ -25,4 +34,9 @@ private:
 	std::shared_ptr<FPSControler> m_fpsControler;
 	std::shared_ptr<Random> m_random;
 	int m_frameCount;
+
+	std::shared_ptr<Player> m_player;
+	std::shared_ptr<ActorManager<Shot>> m_shots;
+	std::shared_ptr<ActorManager<Enemy>> m_enemies;
+	bool m_gameover;
 };

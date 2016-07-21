@@ -1,24 +1,28 @@
 #pragma once
 
+enum class SceneState {
+	Title, Play, Result
+};
+
 class Scene {
 public:
 	Scene() = default;
 	virtual ~Scene() = default;
-	virtual Scene *update() = 0;
-	virtual void draw() = 0;
+	virtual SceneState run() = 0;
 };
 
 class Title : public Scene {
 public:
 	Title();
-	Scene *update() override;
-	void draw() override;
+	SceneState run();
 private:
 };
 
 class Play : public Scene {
 public:
-private:
+	Play();
+	SceneState run();
+private:;
 };
 
 class Result : public Scene {

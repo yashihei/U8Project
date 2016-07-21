@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <memory>
 
-class Direct3D;
+class Graphics;
 class TextureManager;
 class SoundManager;
 class InputManager;
@@ -18,7 +18,7 @@ protected:
 	virtual void update() = 0;
 	virtual void draw() = 0;
 
-	std::shared_ptr<Direct3D> m_direct3d;
+	std::shared_ptr<Graphics> m_graphics;
 	std::shared_ptr<TextureManager> m_textureManager;
 	std::shared_ptr<SoundManager> m_soundManager;
 	std::shared_ptr<InputManager> m_inputManager;

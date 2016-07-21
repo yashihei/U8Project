@@ -1,6 +1,6 @@
 #include "GameApp.h"
 
-#include "Direct3D.h"
+#include "Graphics.h"
 #include "Texture.h"
 #include "Input.h"
 #include "Sound.h"
@@ -10,9 +10,9 @@
 GameApp::GameApp(HWND hWnd, HINSTANCE hInstance) :
 m_frameCount(0)
 {
-	m_direct3d = std::make_shared<Direct3D>(hWnd);
+	m_graphics = std::make_shared<Graphics>(hWnd);
 
-	m_textureManager = std::make_shared<TextureManager>(m_direct3d->getDevice());
+	m_textureManager = std::make_shared<TextureManager>(m_graphics->getDevice());
 	m_textureManager->load("dat/car000.png", "car");
 	m_textureManager->load("dat/gameover.png", "gameover");
 
@@ -29,10 +29,10 @@ void GameApp::run() {
 	m_frameCount++;
 	m_inputManager->update();
 	update();
-	if (SUCCEEDED(m_direct3d->beginScene())) {
+	if (SUCCEEDED(m_graphics->beginScene())) {
 		draw();
-		m_direct3d->endScene();
+		m_graphics->endScene();
 	}
-	m_direct3d->present();
+	m_graphics->present();
 	m_fpsControler->wait();
 }

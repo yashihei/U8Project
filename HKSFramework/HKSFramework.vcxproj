@@ -75,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GraphicDevice.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -87,7 +87,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Actors.h" />
-    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicDevice.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Sound.h" />

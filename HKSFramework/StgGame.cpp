@@ -1,6 +1,6 @@
 #include "StgGame.h"
 
-#include "Graphics.h"
+#include "GraphicDevice.h"
 #include "Texture.h"
 #include "Input.h"
 #include "Sound.h"

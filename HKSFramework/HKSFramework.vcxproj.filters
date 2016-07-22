@@ -42,7 +42,7 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>Source Files\hks</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
+    <ClCompile Include="GraphicDevice.cpp">
       <Filter>Source Files\hks</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,10 +86,10 @@
     <ClInclude Include="GameApp.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics.h">
+    <ClInclude Include="Shape.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
-    <ClInclude Include="Shape.h">
+    <ClInclude Include="GraphicDevice.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
   </ItemGroup>

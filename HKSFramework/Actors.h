@@ -2,7 +2,6 @@
 #include <d3dx9.h>
 #include "Actor.h"
 #include "Input.h"
-#include "Graphics.h"
 #include "StgGame.h"
 #include "Shape.h"
 

@@ -1,4 +1,4 @@
-#include "Graphics.h"
+#include "GraphicDevice.h"
 
 #include <vector>
 #include <stdexcept>

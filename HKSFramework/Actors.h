@@ -4,11 +4,12 @@
 #include "Input.h"
 #include "Graphics.h"
 #include "StgGame.h"
+#include "Shape.h"
 
 class Player {
 public:
-	Player(StgGame* game, std::shared_ptr<InputManager> inputManager, std::shared_ptr<Graphics> graphics) :
-		m_pos(320, 240), m_vec(0.0, 0.0), m_frameCount(0), m_game(game), m_inputManager(inputManager), m_graphics(graphics) {}
+	Player(StgGame* game, std::shared_ptr<InputManager> inputManager, LPDIRECT3DDEVICE9 d3dDevice) :
+		m_pos(320, 240), m_vec(0.0, 0.0), m_frameCount(0), m_game(game), m_inputManager(inputManager), m_d3dDevice(d3dDevice) {}
 	void update() {
 		m_frameCount++;
 
@@ -24,7 +25,7 @@ public:
 	}
 	void draw() {
 		float rad = std::atan2(m_vec.y, m_vec.x);
-		m_graphics->drawNgon(m_pos, 3, 20, rad, D3DCOLOR_ARGB(122, 150, 150, 255));
+		Shape::drawNgon(m_d3dDevice, m_pos, 3, 20, rad, D3DCOLOR_ARGB(122, 150, 150, 255));
 	}
 	D3DXVECTOR2 getPos() { return m_pos; }
 private:
@@ -32,29 +33,29 @@ private:
 	int m_frameCount;
 	StgGame* m_game;
 	std::shared_ptr<InputManager> m_inputManager;
-	std::shared_ptr<Graphics> m_graphics;
+	LPDIRECT3DDEVICE9 m_d3dDevice;
 };
 
 class Shot : public Actor {
 public:
-	Shot(D3DXVECTOR2 pos, D3DXVECTOR2 vec, std::shared_ptr<Graphics> graphics) :
-		m_pos(pos), m_vec(vec), m_graphics(graphics) {}
+	Shot(D3DXVECTOR2 pos, D3DXVECTOR2 vec, LPDIRECT3DDEVICE9 d3dDevice) :
+		m_pos(pos), m_vec(vec), m_d3dDevice(d3dDevice) {}
 	void update() override {
 		m_pos += m_vec;
 	}
 	void draw() override {
-		m_graphics->drawCircle(m_pos, 4, D3DCOLOR_ARGB(200, 255, 165, 30));
+		Shape::drawCircle(m_d3dDevice, m_pos, 4, D3DCOLOR_ARGB(200, 255, 165, 30));
 	}
 	D3DXVECTOR2 getPos() { return m_pos; }
 private:
 	D3DXVECTOR2 m_pos, m_vec;
-	std::shared_ptr<Graphics> m_graphics;
+	LPDIRECT3DDEVICE9 m_d3dDevice;
 };
 
 class Enemy : public Actor {
 public:
-	Enemy(D3DXVECTOR2 pos, StgGame* game, std::shared_ptr<Graphics> graphics) :
-		m_pos(pos), m_rad(0), m_game(game), m_graphics(graphics) {}
+	Enemy(D3DXVECTOR2 pos, StgGame* game, LPDIRECT3DDEVICE9 d3dDevice) :
+		m_pos(pos), m_rad(0), m_game(game), m_d3dDevice(d3dDevice) {}
 	void update() override {
 		auto dis = m_game->getPlayerPos() - m_pos;
 		float rad = std::atan2(dis.y, dis.x);
@@ -62,12 +63,12 @@ public:
 		m_rad += 0.1f;
 	}
 	void draw() override {
-		m_graphics->drawNgon(m_pos, 6, 20, m_rad, D3DCOLOR_ARGB(122, 255, 100, 100));
+		Shape::drawNgon(m_d3dDevice, m_pos, 6, 20, m_rad, D3DCOLOR_ARGB(122, 255, 100, 100));
 	}
 	D3DXVECTOR2 getPos() { return m_pos; }
 private:
 	D3DXVECTOR2 m_pos;
 	float m_rad;
 	StgGame* m_game;
-	std::shared_ptr<Graphics> m_graphics;
+	LPDIRECT3DDEVICE9 m_d3dDevice;
 };

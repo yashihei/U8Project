@@ -89,6 +89,7 @@
     <ClInclude Include="Actors.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="GameApp.h" />

@@ -17,7 +17,7 @@ GameApp(hWnd, hInstance), m_gameover(false)
 	m_soundManager->load("dat/startup.wav", "start");
 	m_soundManager->load("dat/burn.wav", "burn");
 
-	m_player = std::make_shared<Player>(this, m_inputManager, m_graphics);
+	m_player = std::make_shared<Player>(this, m_inputManager, m_graphicDevice->getDevice());
 	m_shots = std::make_shared<ActorManager<Shot>>();
 	m_enemies = std::make_shared<ActorManager<Enemy>>();
 }
@@ -38,7 +38,7 @@ void StgGame::update() {
 		return;
 	}
 	if (m_random->next(0, 60) == 0) {
-		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(0.0f, 640.0f), m_random->next(0.0f, 480.0f)), this, m_graphics);
+		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(0.0f, 640.0f), m_random->next(0.0f, 480.0f)), this, m_graphicDevice->getDevice());
 		m_enemies->add(enemy);
 	}
 	m_player->update();
@@ -61,9 +61,9 @@ void StgGame::update() {
 
 void StgGame::draw() {
 	for (int i = 0; i < 16; i++)
-		m_graphics->drawLine({ i*40.0f, 0.0f }, { i*40.0f, 480.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
+		Shape::drawLine(m_graphicDevice->getDevice(), { i*40.0f, 0.0f }, { i*40.0f, 480.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
 	for (int i = 0; i < 12; i++)
-		m_graphics->drawLine({ 0.0f, i*40.0f }, { 640.f, i*40.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
+		Shape::drawLine(m_graphicDevice->getDevice(), { 0.0f, i*40.0f }, { 640.f, i*40.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
 	m_player->draw();
 	m_shots->draw();
 	m_enemies->draw();
@@ -72,7 +72,7 @@ void StgGame::draw() {
 }
 
 void StgGame::addShot(D3DXVECTOR2 pos, D3DXVECTOR2 vec) {
-	auto shot = std::make_shared<Shot>(pos, vec, m_graphics);
+	auto shot = std::make_shared<Shot>(pos, vec, m_graphicDevice->getDevice());
 	m_shots->add(shot);
 }
 

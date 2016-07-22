@@ -2,10 +2,13 @@
 
 #include <vector>
 
-Texture::Texture(std::string filePath, std::shared_ptr<Graphics> graphics) :
-m_d3dTex(NULL), m_graphics(graphics)
+Texture::Texture(std::string filePath, LPDIRECT3DDEVICE9 d3dDevice) :
+m_d3dTex(NULL), m_d3dDevice(d3dDevice)
 {
-	m_d3dTex = m_graphics->loadTexture(filePath);
+	HRESULT hr = D3DXCreateTextureFromFile(m_d3dDevice, filePath.c_str(), &m_d3dTex);
+	if (FAILED(hr)) {
+		throw std::runtime_error("Failed load " + filePath);
+	}
 
 	//テクスチャのサイズを取得
 	D3DXIMAGE_INFO info;
@@ -51,13 +54,20 @@ void Texture::draw(RectF uvRect, D3DXVECTOR2 pos, float rad, float scale, const 
 		vtx[i].p.y = pos.y + scale * (tPos.x * std::sin(rad) + tPos.y * std::cos(rad));
 	}
 
-	m_graphics->drawTexture(m_d3dTex, vtx);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	m_d3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
+	m_d3dDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+	m_d3dDevice->SetTexture(0, m_d3dTex);
+	m_d3dDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vtx.data(), sizeof(TextureVertex));
+	m_d3dDevice->SetTexture(0, NULL);
 }
 
-TextureManager::TextureManager(std::shared_ptr<Graphics> graphics) :
-m_graphics(graphics)
+TextureManager::TextureManager(LPDIRECT3DDEVICE9 d3dDevice) :
+m_d3dDevice(d3dDevice)
 {}
 
 void TextureManager::load(std::string filePath, std::string alias) {
-	m_textures[alias] = std::make_shared<Texture>(filePath, m_graphics);
+	m_textures[alias] = std::make_shared<Texture>(filePath, m_d3dDevice);
 }

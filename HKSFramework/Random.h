@@ -10,18 +10,24 @@ public:
 	void setSeed(int seed) {
 		mt.seed(seed);
 	}
+	int next(int n) {
+		return next(0, n);
+	}
 	int next(int a, int b) {
 		std::uniform_int_distribution<int> dice(a, b);
 		return dice(mt);
 	}
-	double next(double a, double b) {
-		std::uniform_real_distribution<double> score(a, b);
+	float next(float n) {
+		return next(0.0f, n);
+	}
+	float next(float a, float b) {
+		std::uniform_real_distribution<float> score(a, b);
 		return score(mt);
 	}
 	int nextPlusMinus(int n) {
 		return next(-n, n);
 	}
-	double nextPlusMinus(double n) {
+	float nextPlusMinus(float n) {
 		return next(-n, n);
 	}
 private:

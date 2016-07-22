@@ -37,8 +37,8 @@ void StgGame::update() {
 		}
 		return;
 	}
-	if (m_random->next(0, 60) == 0) {
-		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(0.0f, 640.0f), m_random->next(0.0f, 480.0f)), this, m_graphicDevice->getDevice());
+	if (m_random->next(60) == 0) {
+		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(640.0f), m_random->next(480.0f)), this, m_graphicDevice->getDevice());
 		m_enemies->add(enemy);
 	}
 	m_player->update();

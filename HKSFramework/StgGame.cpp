@@ -8,6 +8,7 @@
 #include "Random.h"
 #include "Util.h"
 #include "Actors.h"
+#include "Font.h"
 
 StgGame::StgGame(HWND hWnd, HINSTANCE hInstance) :
 GameApp(hWnd, hInstance), m_gameover(false)

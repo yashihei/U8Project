@@ -92,5 +92,8 @@
     <ClInclude Include="GraphicDevice.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\hks</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

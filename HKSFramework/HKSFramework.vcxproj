@@ -87,6 +87,7 @@
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Actors.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GraphicDevice.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shape.h" />

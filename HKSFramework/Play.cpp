@@ -2,15 +2,14 @@
 
 #include "Actors.h"
 #include "Random.h"
-#include "GraphicDevice.h"
 #include "Input.h"
 #include "Sound.h"
 
-Play::Play(std::shared_ptr<InputManager> inputManager, std::shared_ptr<GraphicDevice> graphicDevice, std::shared_ptr<SoundManager> soundManager) :
-	m_inputManager(inputManager), m_graphicDevice(graphicDevice), m_soundManager(soundManager)
+Play::Play(std::shared_ptr<InputManager> inputManager, std::shared_ptr<SoundManager> soundManager, LPDIRECT3DDEVICE9 d3dDevice) :
+	m_inputManager(inputManager), m_soundManager(soundManager), m_d3dDevice(d3dDevice)
 {
 	m_random = std::make_shared<Random>();
-	m_player = std::make_shared<Player>(this, m_inputManager, m_graphicDevice->getDevice());
+	m_player = std::make_shared<Player>(this, m_inputManager, m_d3dDevice);
 	m_shots = std::make_shared<ActorManager<Shot>>();
 	m_enemies = std::make_shared<ActorManager<Enemy>>();
 }
@@ -23,7 +22,7 @@ bool isHit(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, float radius1, float radius2) {
 
 void Play::update() {
 	if (m_random->next(60) == 0) {
-		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(640.0f), m_random->next(480.0f)), this, m_graphicDevice->getDevice());
+		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(640.0f), m_random->next(480.0f)), this, m_d3dDevice);
 		m_enemies->add(enemy);
 	}
 	m_player->update();
@@ -46,9 +45,9 @@ void Play::update() {
 
 void Play::draw() {
 	for (int i = 0; i < 16; i++)
-		Shape::drawLine(m_graphicDevice->getDevice(), { i*40.0f, 0.0f }, { i*40.0f, 480.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
+		Shape::drawLine(m_d3dDevice, { i*40.0f, 0.0f }, { i*40.0f, 480.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
 	for (int i = 0; i < 12; i++)
-		Shape::drawLine(m_graphicDevice->getDevice(), { 0.0f, i*40.0f }, { 640.f, i*40.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
+		Shape::drawLine(m_d3dDevice, { 0.0f, i*40.0f }, { 640.f, i*40.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
 	m_player->draw();
 	m_shots->draw();
 	m_enemies->draw();

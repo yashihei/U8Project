@@ -1,6 +1,6 @@
 #include "GameApp.h"
 
-#include "GraphicDevice.h"
+#include "Graphic.h"
 #include "Texture.h"
 #include "Input.h"
 #include "Sound.h"

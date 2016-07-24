@@ -6,9 +6,6 @@
 
 enum class SceneType;
 class Scene;
-class Player;
-class Shot;
-class Enemy;
 
 class StgGame : public GameApp {
 public:

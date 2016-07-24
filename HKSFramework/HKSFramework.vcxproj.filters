@@ -42,11 +42,11 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>Source Files\hks</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicDevice.cpp">
-      <Filter>Source Files\hks</Filter>
-    </ClCompile>
     <ClCompile Include="Play.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>Source Files\hks</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,14 +95,14 @@
     <ClInclude Include="Font.h">
       <Filter>Header Files\hks</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicDevice.h">
-      <Filter>Header Files\hks</Filter>
-    </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Play.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>Header Files\hks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

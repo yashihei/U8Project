@@ -1,6 +1,6 @@
 #include "StgGame.h"
 
-#include "GraphicDevice.h"
+#include "Graphic.h"
 #include "Texture.h"
 #include "Input.h"
 #include "Sound.h"
@@ -38,7 +38,7 @@ void StgGame::changeScene(SceneType type) {
 		m_scene = std::make_shared<Title>(m_inputManager, m_graphicDevice->getDevice());
 		break;
 	case SceneType::Play:
-		m_scene = std::make_shared<Play>(m_inputManager, m_graphicDevice, m_soundManager);
+		m_scene = std::make_shared<Play>(m_inputManager, m_soundManager, m_graphicDevice->getDevice());
 		break;
 	}
 }

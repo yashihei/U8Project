@@ -11,6 +11,9 @@ Actorを管理するクラスです。
 ### Animation
 Textureをアニメーションすることが出来ます。
 
+### Font
+ID3DXFontのラッパーです。
+
 ### FPSControler
 FPSの管理をします。
 

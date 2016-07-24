@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="GraphicDevice.cpp" />
+    <ClCompile Include="Play.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Actors.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GraphicDevice.h" />
+    <ClInclude Include="Play.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="Sound.h" />
@@ -99,6 +101,7 @@
     <ClInclude Include="Random.h" />
     <ClInclude Include="StgGame.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

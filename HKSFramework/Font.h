@@ -18,7 +18,7 @@ public:
 		if (m_font)
 			m_font->Release();
 	}
-	void drawStr(Point pos, std::string str, D3DCOLOR color) {
+	void drawStr(std::string str, Point pos, D3DCOLOR color = 0xFFFFFFFF) {
 		RECT rect = { pos.x, pos.y, 0, 0 };
 		m_font->DrawText(NULL, str.c_str(), -1, &rect, DT_NOCLIP, color);
 	}

@@ -190,3 +190,5 @@ ModelManifest.xml
 
 # User
 ignore/
+~AutoRecover.*
+

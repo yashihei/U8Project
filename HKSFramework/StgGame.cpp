@@ -9,74 +9,36 @@
 #include "Util.h"
 #include "Actors.h"
 #include "Font.h"
+#include "Title.h"
 
 StgGame::StgGame(HWND hWnd, HINSTANCE hInstance) :
-GameApp(hWnd, hInstance), m_gameover(false)
+GameApp(hWnd, hInstance) 
 {
 	m_textureManager->load("dat/car000.png", "car");
 	m_textureManager->load("dat/gameover.png", "gameover");
 	m_soundManager->load("dat/startup.wav", "start");
 	m_soundManager->load("dat/burn.wav", "burn");
-
-	m_player = std::make_shared<Player>(this, m_inputManager, m_graphicDevice->getDevice());
-	m_shots = std::make_shared<ActorManager<Shot>>();
-	m_enemies = std::make_shared<ActorManager<Enemy>>();
-}
-
-bool isHit(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2, float radius1, float radius2) {
-	if (std::pow(pos1.x - pos2.x, 2.0f) + std::pow(pos1.y - pos2.y, 2.0f) <= std::pow(radius1 + radius2, 2.0f))
-		return true;
-	return false;
+	m_scene = std::make_shared<Title>(m_inputManager, m_graphicDevice->getDevice());
 }
 
 void StgGame::update() {
-	if (m_gameover) {
-		if (m_inputManager->isClickedButton3()) {
-			m_gameover = false;
-			m_enemies->clear();
-			m_shots->clear();
-		}
-		return;
-	}
-	if (m_random->next(60) == 0) {
-		auto enemy = std::make_shared<Enemy>(D3DXVECTOR2(m_random->next(640.0f), m_random->next(480.0f)), this, m_graphicDevice->getDevice());
-		m_enemies->add(enemy);
-	}
-	m_player->update();
-	m_shots->update();
-	m_enemies->update();
-	for (auto& shot : *m_shots) {
-		for (auto& enemy : *m_enemies) {
-			if (isHit(enemy->getPos(), shot->getPos(), 10, 3)) {
-				shot->kill();
-				enemy->kill();
-				m_soundManager->play("burn");
-			}
-		}
-	}
-	for (auto& enemy : *m_enemies) {
-		if (isHit(enemy->getPos(), m_player->getPos(), 10, 3))
-			m_gameover = true;
-	}
+	m_scene->update();
+	if (m_scene->nextScene() != SceneType::None)
+		changeScene(m_scene->nextScene());
 }
 
 void StgGame::draw() {
-	for (int i = 0; i < 16; i++)
-		Shape::drawLine(m_graphicDevice->getDevice(), { i*40.0f, 0.0f }, { i*40.0f, 480.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
-	for (int i = 0; i < 12; i++)
-		Shape::drawLine(m_graphicDevice->getDevice(), { 0.0f, i*40.0f }, { 640.f, i*40.0f }, 1.0f, D3DCOLOR_ARGB(32, 255, 255, 255));
-	m_player->draw();
-	m_shots->draw();
-	m_enemies->draw();
-	if (m_gameover)
-		m_textureManager->getTexture("gameover")->draw({ 320, 240 });
+	m_scene->draw();
 }
 
-void StgGame::addShot(D3DXVECTOR2 pos, D3DXVECTOR2 vec) {
-	auto shot = std::make_shared<Shot>(pos, vec, m_graphicDevice->getDevice());
-	m_shots->add(shot);
-}
-
-D3DXVECTOR2 StgGame::getPlayerPos() {
-	return m_player->getPos();
+void StgGame::changeScene(SceneType type) {
+	switch (type)
+	{
+	case SceneType::Title:
+		m_scene = std::make_shared<Title>(m_inputManager, m_graphicDevice->getDevice());
+		break;
+	case SceneType::Play:
+		m_scene = std::make_shared<Play>(m_inputManager, m_graphicDevice, m_soundManager);
+		break;
+	}
 }

@@ -4,6 +4,8 @@
 #include "Actor.h"
 #include "GameApp.h"
 
+enum class SceneType;
+class Scene;
 class Player;
 class Shot;
 class Enemy;
@@ -11,14 +13,9 @@ class Enemy;
 class StgGame : public GameApp {
 public:
 	StgGame(HWND hWnd, HINSTANCE hInstance);
-	void addShot(D3DXVECTOR2 pos, D3DXVECTOR2 vec);
-	D3DXVECTOR2 getPlayerPos();
 private:
 	void update() override;
 	void draw() override;
-
-	std::shared_ptr<Player> m_player;
-	std::shared_ptr<ActorManager<Shot>> m_shots;
-	std::shared_ptr<ActorManager<Enemy>> m_enemies;
-	bool m_gameover;
+	void changeScene(SceneType type);
+	std::shared_ptr<Scene> m_scene;
 };
